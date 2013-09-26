@@ -26,3 +26,16 @@ ONMjs was created to simplify the development of complex client-side HTML 5 data
 [ChrisRus]: http://blog.encapsule.org/author/chrisrus/ "Chris Russell"
 [license]: http://opensource.org/licenses/MIT "The MIT License (MIT)"
 [repository]: https://github.com/Encapsule/ONMjs "Encapsule/ONMjs Repo on GitHub"
+
+
+<!-- External Link Definitions -->
+[JSON]: http://json.org "JSON Grammar Specification Primer"
+[DesignPatterns]: http://en.wikipedia.org/wiki/Design_Patterns "Design Patterns article on Wikipedia"
+[SignalProgramming]: http://en.wikipedia.org/wiki/Signal_programming "Signal Programming article on Wikipedia"
+[SeparationOfConcerns]: http://en.wikipedia.org/wiki/Separation_of_concerns "Separation of Concerns article on Wikipedia"
+[ComponentEngineering]: http://en.wikipedia.org/wiki/Component-based_software_engineering "Component-Based Software Engineering article on Wikipedia"
+[ObserverPattern]: http://en.wikipedia.org/wiki/Observer_pattern "Observer Pattern article on Wikipedia"
+[Nodejs]: http://nodejs.org "Node.js Homepage"
+[JQuery]: http://jquery.org "JQuery Homepage"
+[D3js]: http://d3js.org "D3js Homepage"
+[Knockout]: http://knockoutjs.com "Knockout.js Homepage"
