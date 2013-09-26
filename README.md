@@ -1,4 +1,26 @@
-ONMjs
-=====
+![Encapsule Project ONMjs Library](wiki/ivory_sphere_250x250.jpg "Encapsule Project ONMjs Library")
 
-ONMjs is a generic Object Namespace Manager library for Javascript applications. xxyy
+ONMjs is a data model management and infrastructure library that helps you separate concerns at design time, and build structured application logic that is coupled only with your application's data model and the ONMjs-provided infrastructure that glues everything together.
+
+ONMjs was created to simplify the development of complex client-side HTML 5 data visualization and editing applications but is neither a UI nor strictly client-side library.
+
+## Quick Facts
+
+* Core dependencies: None. ONMjs' core classes are pure Javascript.
+* Observer dependencies: [JQuery][JQuery], [D3js][D3js], [Knockout.js][Knockout]
+* Status: Preview
+* License: [MIT][license]
+* Sources: [Encapsule/ONMjs][repository] (GitHub)
+* News: [@Encapsule][EncapsuleTwitter] // [blog.encapsule.org][EncapsuleBlog]
+* Publisher: [Encapsule Project][EncapsuleProject]
+* Author: [ChrisRus][ChrisRus]
+
+
+<!-- Encapsule Project Link Definitions -->
+[EncapsuleProject]: http://www.encapsule.org "Encapsule Project Homepage"
+[EncapsuleTwitter]: https://twitter.com/Encapsule "@Encapsule on Twitter"
+[EncapsuleBlog]: http://blog.encapsule.org "Encapsule Project Blog"
+[schemaApp]: http://schema.encapsule.org "Encapsule Project Schema App"
+[ChrisRus]: http://blog.encapsule.org/author/chrisrus/ "Chris Russell"
+[license]: http://opensource.org/licenses/MIT "The MIT License (MIT)"
+[repository]: https://github.com/Encapsule/ONMjs "Encapsule/ONMjs Repo on GitHub"
