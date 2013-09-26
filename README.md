@@ -1,4 +1,4 @@
 ONMjs
 =====
 
-ONMjs is a generic Object Namespace Manager library for Javascript applications.
+ONMjs is a generic Object Namespace Manager library for Javascript applications. xx
