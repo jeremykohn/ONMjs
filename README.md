@@ -1,10 +1,12 @@
-![Encapsule Project ONMjs Library](wiki/ivory_sphere_250x250.jpg "Encapsule Project ONMjs Library")
+![Encapsule Project ONMjs Library](https://github.com/Encapsule/ONMjs/wiki/ivory_sphere_250x250.jpg)
 
-ONMjs is a data model management and infrastructure library that helps you separate concerns at design time, and build structured application logic that is coupled only with your application's data model and the ONMjs-provided infrastructure that glues everything together.
+**O**bject **N**amespace **M**anager (ONMjs) is a data model management and infrastructure library that helps you separate concerns at design time, and build structured application logic that is coupled only with your application's data model and the ONMjs-provided infrastructure that glues everything together.
 
 ONMjs was created to simplify the development of complex client-side HTML 5 data visualization and editing applications but is neither a UI nor strictly client-side library.
 
-## Quick Facts
+**[ONMjs Library Documentation](https://github.com/Encapsule/ONMjs/wiki)**
+
+#### Quick Facts
 
 * Core dependencies: None. ONMjs' core classes are pure Javascript.
 * Observer dependencies: [JQuery][JQuery], [D3js][D3js], [Knockout.js][Knockout]
