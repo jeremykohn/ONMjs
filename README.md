@@ -8,7 +8,7 @@ ONMjs was created to simplify the development of complex client-side HTML 5 data
 
 #### Quick Facts
 
-* Core dependencies: None. ONMjs' core classes are pure Javascript.
+* Core dependencies: **None**. ONMjs' core classes are pure Javascript.
 * Observer dependencies: [JQuery][JQuery], [D3js][D3js], [Knockout.js][Knockout]
 * Status: Preview
 * License: [MIT][license]
