@@ -4,6 +4,10 @@
 onm_version="0.0.6"
 
 lib_prefix="ONMjs-lib"
+
+lib_debug=$lib_prefix-debug
+lib_min=$lib_prefix-min
+
 lib_core_prefix=$lib_prefix-core
 lib_observer_prefix=$lib_prefix-observer
 
@@ -48,6 +52,8 @@ build_cs=$build/cs
 build_cs_core=$build_cs/core
 build_cs_observer=$build_cs/observer
 build_js=$build/js
+build_js_core=$build_js/core
+build_js_observer=$build_js/observer
 
 if [ -d $build ]
 then
@@ -66,8 +72,9 @@ then
 
     echo 'Encapsule.code.lib.onm.version = "'$onm_version'"\n\n' > $build_cs_core/ONMjs-core-version.coffee
 
-    onmcfile=$build_cs_core/$lib_core_debug.coffee
-    onmofile=$build_cs_observer/$lib_observer_debug.coffee
+    onmcfile=$build_cs/$lib_core_debug.coffee
+    onmofile=$build_cs/$lib_observer_debug.coffee
+    onmfile=$build_cs/$lib_debug.coffee
 
     touch $onmcfile
     cat $sources_cs_core/encapsule-lib-javascript.coffee >> $onmcfile
@@ -107,6 +114,19 @@ then
 
     cp $sources_js/*.js $build_js/
 fi
+
+coffee -o $build_js/ -c $build_cs/*.coffee
+coffee -o $build_js_core/ -c $build_cs_core/*.coffee
+coffee -o $build_js_observer/ -c $build_cs_observer/*.coffee
+
+cp $build_js/$lib_core_debug.js $build_js/$lib_core_debug-raw.js
+cat $build_js/uuid.js $build_js/$lib_core_debug-raw.js > $build_js/$lib_core_debug.js
+rm $build_js/$lib_core_debug-raw.js
+rm $build_js/uuid.js
+
+
+cat $build_js/$lib_core_debug.js $build_js/$lib_observer_debug.js > $build_js/$lib_debug.js
+
 
 
 
