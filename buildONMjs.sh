@@ -1,7 +1,7 @@
 #! /bin/sh
 #
-
 onm_version="0.0.6"
+echo =================================================================
 
 lib_prefix="ONMjs-lib"
 
@@ -16,6 +16,8 @@ lib_core_min=$lib_core_prefix-min
 
 lib_observer_debug=$lib_observer_prefix-debug
 lib_observer_min=$lib_observer_prefix-min
+
+echo onm_version=$onm_version
 
 echo lib_prefix=$lib_prefix
 echo lib_core_prefix=$lib_core_prefix
@@ -32,20 +34,17 @@ then
 fi
 
 repoDir=`pwd`
-
 lib=$repoDir/lib
-
 sources=$repoDir/sources
 sources_cs=$sources/cs
 sources_cs_core=$sources_cs/core
 sources_cs_observer=$sources_cs/observer
 sources_js=$sources/js
-
-echo $sources
-echo $sources_cs
-echo $sources_cs_core
-echo $sources_cs_observer
-echo $sources_js
+echo sources=$sources
+echo sources_cs=$sources_cs
+echo sources_cs_core=$sources_cs_core
+echo sources_cs_observer=$sources_cs_observer
+echo sources_js=$sources_js
 
 stage=$repoDir/stage
 stage_cs=$stage/cs
@@ -54,7 +53,6 @@ stage_cs_observer=$stage_cs/observer
 stage_js=$stage/js
 stage_js_core=$stage_js/core
 stage_js_observer=$stage_js/observer
-
 echo stage=$stage
 echo stage_cs=$stage_cs
 echo stage_cs_core=$stage_cs_core
@@ -63,9 +61,11 @@ echo stage_js=$stage_js
 echo stage_js_core=$stage_js_core
 echo stage_js_observer=$stage_js_observer
 
+echo =================================================================
+
 if [ -d $stage ]
 then
-    echo Attempting to remove old staging directory...
+    echo Removing old staging directory...
     rm -rf $stage
 fi
 
@@ -81,15 +81,18 @@ then
     mkdir $stage_cs_core
     mkdir $stage_cs_observer
 
+    echo "Staging files..."
     cp $sources_cs_core/*.coffee $stage_cs_core/
     cp $sources_cs_observer/*.coffee $stage_cs_observer/
 
+    echo ... creating ONMjs-core-version.coffee
     echo 'Encapsule.code.lib.onm.version = "'$onm_version'"\n\n' > $stage_cs_core/ONMjs-core-version.coffee
 
     onmcfile=$stage_cs/$lib_core_debug.coffee
     onmofile=$stage_cs/$lib_observer_debug.coffee
     onmfile=$stage_cs/$lib_debug.coffee
 
+    echo ... creating $onmcfile
     touch $onmcfile
     cat $sources_cs_core/encapsule-lib-javascript.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-model.coffee >> $onmcfile
@@ -102,6 +105,7 @@ then
     cat $sources_cs_core/ONMjs-core-cached-address.coffee >> $onmcfile
     cat $stage_cs_core/ONMjs-core-version.coffee >> $onmcfile
 
+    echo ... creating $onmofile
     touch $onmofile
     cat $sources_cs_observer/encapsule-lib-console.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
@@ -125,32 +129,51 @@ fi
 if [ ! -d $stage_js ]
 then
     mkdir $stage_js
-
     cp $sources_js/*.js $stage_js/
 fi
 
+echo =================================================================
+echo Compiling ONMjs library CoffeeScript sources...
+echo ... main library sources
 coffee -o $stage_js/ -c $stage_cs/*.coffee
+echo ... individual core
 coffee -o $stage_js_core/ -c $stage_cs_core/*.coffee
+echo ... individual observer
 coffee -o $stage_js_observer/ -c $stage_cs_observer/*.coffee
 
+echo =================================================================
+echo Finalizing ONMjs library debug Javascript files...
 cp $stage_js/$lib_core_debug.js $stage_js/$lib_core_debug-raw.js
 cat $stage_js/uuid.js $stage_js/$lib_core_debug-raw.js > $stage_js/$lib_core_debug.js
 rm $stage_js/$lib_core_debug-raw.js
 rm $stage_js/uuid.js
-
-
 cat $stage_js/$lib_core_debug.js $stage_js/$lib_observer_debug.js > $stage_js/$lib_debug.js
 
+echo =================================================================
+echo Generating ONMjs library release Javascript files...
+echo ... $stage_js/$lib_core_min.js
 uglifyjs -mangle -v $stage_js/$lib_core_debug.js > $stage_js/$lib_core_min.js
+echo ... $stage_js/$lib_observer_min.js
 uglifyjs -mangle -v $stage_js/$lib_observer_debug.js > $stage_js/$lib_observer_min.js
+echo ... $stage_js/$lib_min.js
 uglifyjs -mangle -v $stage_js/$lib_debug.js > $stage_js/$lib_min.js
 
+echo =================================================================
+echo Generating ONMjs library versioned Javascript files...
 for x in $stage_js/*.js
 do
-    cp $x $stage_js/`basename -s .js $x`-$onm_version.js
+    versionedFilename=$stage_js/`basename -s .js $x`-$onm_version.js
+    cp $x $versionedFilename
+    echo ... $versionedFilename
 done
 
+echo =================================================================
+echo COMPLETE. Files in staging Javascript directory:
+ls -l $stage_js/$lib_prefix*
 
+echo =================================================================
+echo =================================================================
+echo =================================================================
 
 
 
