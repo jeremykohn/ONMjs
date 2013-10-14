@@ -47,34 +47,48 @@ echo $sources_cs_core
 echo $sources_cs_observer
 echo $sources_js
 
-build=$repoDir/build
-build_cs=$build/cs
-build_cs_core=$build_cs/core
-build_cs_observer=$build_cs/observer
-build_js=$build/js
-build_js_core=$build_js/core
-build_js_observer=$build_js/observer
+stage=$repoDir/stage
+stage_cs=$stage/cs
+stage_cs_core=$stage_cs/core
+stage_cs_observer=$stage_cs/observer
+stage_js=$stage/js
+stage_js_core=$stage_js/core
+stage_js_observer=$stage_js/observer
 
-if [ -d $build ]
+echo stage=$stage
+echo stage_cs=$stage_cs
+echo stage_cs_core=$stage_cs_core
+echo stage_cs_observer_=$stage_cs_observer
+echo stage_js=$stage_js
+echo stage_js_core=$stage_js_core
+echo stage_js_observer=$stage_js_observer
+
+if [ -d $stage ]
 then
-    rm -rf $build
-    mkdir $build
+    echo Attempting to remove old staging directory...
+    rm -rf $stage
 fi
 
-if [ ! -d $build_cs ]
+if [ ! -d $stage ]
 then
-    mkdir $build_cs
-    mkdir $build_cs_core
-    mkdir $build_cs_observer
+    echo Creating new staging directory...
+    mkdir $stage
+fi
 
-    cp $sources_cs_core/*.coffee $build_cs_core/
-    cp $sources_cs_observer/*.coffee $build_cs_observer/
+if [ ! -d $stage_cs ]
+then
+    mkdir $stage_cs
+    mkdir $stage_cs_core
+    mkdir $stage_cs_observer
 
-    echo 'Encapsule.code.lib.onm.version = "'$onm_version'"\n\n' > $build_cs_core/ONMjs-core-version.coffee
+    cp $sources_cs_core/*.coffee $stage_cs_core/
+    cp $sources_cs_observer/*.coffee $stage_cs_observer/
 
-    onmcfile=$build_cs/$lib_core_debug.coffee
-    onmofile=$build_cs/$lib_observer_debug.coffee
-    onmfile=$build_cs/$lib_debug.coffee
+    echo 'Encapsule.code.lib.onm.version = "'$onm_version'"\n\n' > $stage_cs_core/ONMjs-core-version.coffee
+
+    onmcfile=$stage_cs/$lib_core_debug.coffee
+    onmofile=$stage_cs/$lib_observer_debug.coffee
+    onmfile=$stage_cs/$lib_debug.coffee
 
     touch $onmcfile
     cat $sources_cs_core/encapsule-lib-javascript.coffee >> $onmcfile
@@ -86,7 +100,7 @@ then
     cat $sources_cs_core/ONMjs-core-store-reifier.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-store.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-cached-address.coffee >> $onmcfile
-    cat $build_cs_core/ONMjs-core-version.coffee >> $onmcfile
+    cat $stage_cs_core/ONMjs-core-version.coffee >> $onmcfile
 
     touch $onmofile
     cat $sources_cs_observer/encapsule-lib-console.coffee >> $onmofile
@@ -108,24 +122,37 @@ then
 
 fi
 
-if [ ! -d $build_js ]
+if [ ! -d $stage_js ]
 then
-    mkdir $build_js
+    mkdir $stage_js
 
-    cp $sources_js/*.js $build_js/
+    cp $sources_js/*.js $stage_js/
 fi
 
-coffee -o $build_js/ -c $build_cs/*.coffee
-coffee -o $build_js_core/ -c $build_cs_core/*.coffee
-coffee -o $build_js_observer/ -c $build_cs_observer/*.coffee
+coffee -o $stage_js/ -c $stage_cs/*.coffee
+coffee -o $stage_js_core/ -c $stage_cs_core/*.coffee
+coffee -o $stage_js_observer/ -c $stage_cs_observer/*.coffee
 
-cp $build_js/$lib_core_debug.js $build_js/$lib_core_debug-raw.js
-cat $build_js/uuid.js $build_js/$lib_core_debug-raw.js > $build_js/$lib_core_debug.js
-rm $build_js/$lib_core_debug-raw.js
-rm $build_js/uuid.js
+cp $stage_js/$lib_core_debug.js $stage_js/$lib_core_debug-raw.js
+cat $stage_js/uuid.js $stage_js/$lib_core_debug-raw.js > $stage_js/$lib_core_debug.js
+rm $stage_js/$lib_core_debug-raw.js
+rm $stage_js/uuid.js
 
 
-cat $build_js/$lib_core_debug.js $build_js/$lib_observer_debug.js > $build_js/$lib_debug.js
+cat $stage_js/$lib_core_debug.js $stage_js/$lib_observer_debug.js > $stage_js/$lib_debug.js
+
+uglifyjs -mangle -v $stage_js/$lib_core_debug.js > $stage_js/$lib_core_min.js
+uglifyjs -mangle -v $stage_js/$lib_observer_debug.js > $stage_js/$lib_observer_min.js
+uglifyjs -mangle -v $stage_js/$lib_debug.js > $stage_js/$lib_min.js
+
+for x in $stage_js/*.js
+do
+    cp $x $stage_js/`basename -s .js $x`-$onm_version.js
+done
+
+
+
+
 
 
 
