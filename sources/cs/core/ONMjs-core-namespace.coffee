@@ -81,7 +81,7 @@ class ONMjs.Namespace
             @getResolvedToken = => @resolvedTokenArray.length and @resolvedTokenArray[@resolvedTokenArray.length - 1] or undefined
 
             for addressToken in address.implementation.tokenVector
-                tokenBinder = new ONMjs.implementation.implementation.AddressTokenBinder(store_, @dataReference, addressToken, mode)
+                tokenBinder = new ONMjs.implementation.AddressTokenBinder(store_, @dataReference, addressToken, mode)
                 @resolvedTokenArray.push tokenBinder.resolvedToken
                 @dataReference = tokenBinder.dataReference
                 if mode == "new"

@@ -31,6 +31,11 @@ $(function() {
         var observerId = dataStore.registerObserver(observerCanary.callbackInterface, observerCanary);
 
         Console.message("Beginning tests.");
+
+        var selectedAddress = new ONMjs.CachedAddress(dataStore, dataModel.createRootAddress());
+
+
+
         Console.message("Tests completed successfully.");
 
         Console.message("Detaching observer from data store...");
