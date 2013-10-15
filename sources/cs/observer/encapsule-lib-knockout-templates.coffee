@@ -32,10 +32,11 @@ Encapsule.runtime.app.kotemplates = Encapsule.runtime.app.kotemplates? and Encap
 Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate = (selectorId_, fnHtml_) ->
     try
         if not selectorId_? or not selectorId_ or not fnHtml_? or not fnHtml_ then throw "RegisterKnockoutViewTemplate bad parameter(s)"
+        koTemplate = { selectorId_ , fnHtml_ }
         Encapsule.runtime.app.kotemplates.push koTemplate
         true
     catch exception
-        throw "RegisterKnockoutViewTemplate selectorId=#{selectId_} : #{exception}"
+        throw "RegisterKnockoutViewTemplate selectorId=#{selectorId_} : #{exception}"
 
 
 Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate = (descriptor_, parentEl_) ->
