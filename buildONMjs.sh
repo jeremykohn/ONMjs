@@ -35,6 +35,10 @@ fi
 
 repoDir=`pwd`
 lib=$repoDir/lib
+lib_latest=$lib/latest
+lib_release=$lib/release
+
+
 sources=$repoDir/sources
 sources_cs=$sources/cs
 sources_cs_core=$sources_cs/core
@@ -60,6 +64,8 @@ echo stage_cs_observer_=$stage_cs_observer
 echo stage_js=$stage_js
 echo stage_js_core=$stage_js_core
 echo stage_js_observer=$stage_js_observer
+
+
 
 app_build_date=`date -u`
 app_build_uuid=`uuidgen`
@@ -145,7 +151,26 @@ then
     mkdir $stage_js
     cp $sources_js/*.js $stage_js/
 fi
-
+if [ ! -d $lib ]
+then
+    mkdir $lib
+fi
+if [ -d $lib_latest ]
+then
+    rmdir -rf $lib_latest
+fi
+if [ ! -d $lib_latest ]
+then
+    mkdir $lib_latest
+fi
+if [ -d $lib_release ]
+then
+    rmdir $lib_release
+fi
+if [ ! -d $lib_release ]
+then
+    mkdir $lib_release
+fi
 echo =================================================================
 echo Compiling ONMjs library CoffeeScript sources...
 echo ... main library sources
@@ -181,17 +206,34 @@ do
     echo ... $versionedFilename
 done
 
+cp $stage_js/ONMjs-lib*.js $lib_latest
+
+
+
 echo =================================================================
 echo COMPLETE. STAGED FILES:
 ls -l $stage_js/$lib_prefix*
 
+
+if [ "$1" = "release" ]
+then
+echo "RELEASING..."
+
+cp $stage_js/ONMjs-lib-core-debug*.js $lib_release/
+cp $stage_js/ONMjs-lib-core-min*.js $lib_release/
+
+
+cp $stage_js/ONMjs-lib-observer-debug*.js $lib_release/
+cp $stage_js/ONMjs-lib-observer-min*.js $lib_release
+
+cp $stage_js/ONMjs-lib-debug*.js $lib_release/
+cp $stage_js/ONMjs-lib-min*.js $lib_release/
+
+fi
+
 echo =================================================================
 echo =================================================================
 echo =================================================================
-
-
-
-
 
 
 
