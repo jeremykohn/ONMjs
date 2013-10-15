@@ -167,7 +167,7 @@ ONMjs.implementation.binding.ResolveNamespaceDescriptor = (resolveActions_, stor
                         throw "In order to create new components at runtime you must define the semanticBindings.getUniqueKey function in your data model declaration object."
                     resolveResults.key = resolveResults.jsonTag = resolveActions_.getUniqueKey(newData)
                     if not (resolveResults.key? and resolveResults.key)
-                        throw "Unable to obtain key for new data component from function semanticBindings.getUniqueKey."
+                        throw "Your data model's semanticBindings.getUniqueKey function returned an invalid key. Key cannot be zero or zero-length."
 
                 resolveResults.dataReference = resolveResults.dataParentReference[resolveResults.jsonTag] = newData
                 resolveResults.created = true

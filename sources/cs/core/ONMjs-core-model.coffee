@@ -234,7 +234,7 @@ class ONMjs.implementation.ModelDetails
                     if not (path_? and path_) then throw "Missing object model path parameter!"
                     objectModelDescriptor = @objectModelPathMap[path_]
                     if not (objectModelDescriptor? and objectModelDescriptor)
-                        throw "Invalid object model path '#{objectModelPath_}' cannot be resolved."
+                        throw "Path '#{path_}' is not in the '#{@model.jsonTag}' model's address space."
                     objectModelPathId = objectModelDescriptor.id
                     if not objectModelPathId?
                         throw "Internal error: Invalid object model descriptor doesn't support id property for path '#{objectModelPath_}."

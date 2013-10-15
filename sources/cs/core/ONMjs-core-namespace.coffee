@@ -72,7 +72,7 @@ class ONMjs.Namespace
             mode = mode_? and mode_ or "bypass"
 
             if (mode != "new") and not address.isResolvable()
-                throw "Specified address is unresolvable in #{mode} mode."
+                throw "'#{mode}' mode error: Unresolvable address '#{address.getHumanReadableString()}' invalid for this operation."
 
             # The actual store data.
 

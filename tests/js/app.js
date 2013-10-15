@@ -15,8 +15,34 @@ $(function() {
 
         var dataModelDeclaration = {
             namespaceType: "root",
-            jsonTag: "testDataRoot"
+            jsonTag: "addressBook",
+            ____label: "Address Book",
+            ____description: "Address book data object.",
+
+            subNamespaces: [
+                {
+                    namespaceType: "extensionPoint",
+                    jsonTag: "contacts",
+                    ____label: "Contacts",
+                    ____description: "A collection of address book contacts.",
+                    componentArchetype: {
+                        namespaceType: "component",
+                        jsonTag: "contact",
+                        ____label: "Contact",
+                        ____description: "An address book contact data object."
+                    }
+                }
+            ],
+            semanticBindings: {
+                getUniqueKey: function(data_) {
+                    data_.key = uuid.v4();
+                    return data_.key;
+                }
+            }
+         
         };
+        Console.message("Beginning tests.");
+
 
         Console.message("Creating an ONMjs data model.");
         var dataModel = new ONMjs.Model(dataModelDeclaration);
@@ -24,22 +50,33 @@ $(function() {
         Console.message("Creating an ONMjs data store.");
         var dataStore = new ONMjs.Store(dataModel);
 
-        Console.message("Creating an ONMjs generic observer.");
-        var observerCanary = new ONMjs.test.observers.Canary();
+        var address = dataModel.createPathAddress("addressBook.contacts");
 
-        Console.message("Attaching observer to data store...");
-        var observerId = dataStore.registerObserver(observerCanary.callbackInterface, observerCanary);
+        Console.message("Creating an ONMjs address store.");
+        var addressStore = new ONMjs.CachedAddress(dataStore, address);
 
-        Console.message("Beginning tests.");
+        Console.message("Creating generic observer.");
+        var genericObserver = new ONMjs.test.observers.Canary();
 
-        var selectedAddress = new ONMjs.CachedAddress(dataStore, dataModel.createRootAddress());
+        Console.message("Attaching observers...");
+        var observerIdData = dataStore.registerObserver(genericObserver.callbackInterface, "Data Store Observer");
+        var observerIdAddress = addressStore.registerObserver(genericObserver.callbackInterface, "Address Store Observer");
 
+        newContactAddress  = dataModel.createPathAddress("addressBook.contacts.contact");
 
+        Console.message("Creating new contact in address book.");
+        newContactNamespace = dataStore.createComponent(newContactAddress);
+
+        Console.message("Creating new contact in address book.");
+        newContactNamespace = dataStore.createComponent(newContactAddress);
+
+        addressStore.setAddress(newContactNamespace.getResolvedAddress());
 
         Console.message("Tests completed successfully.");
 
-        Console.message("Detaching observer from data store...");
-        dataStore.unregisterObserver(observerId);
+        Console.message("Detaching observers...");
+        addressStore.unregisterObserver(observerIdAddress);
+        dataStore.unregisterObserver(observerIdData);
 
         Console.message("Test app exit.");
 

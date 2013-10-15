@@ -246,7 +246,7 @@ class ONMjs.Address
                     humanReadableString += ".#{token.key}."
                 else
                     if token.idExtensionPoint > 0
-                        humanReadableString += "."
+                        humanReadableString += "-"
                     
                 humanReadableString += "#{token.idNamespace}"
                 index++
