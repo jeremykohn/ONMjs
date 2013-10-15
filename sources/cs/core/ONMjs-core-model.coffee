@@ -272,7 +272,7 @@ class ONMjs.implementation.ModelDetails
                         descriptor = @getNamespaceDescriptorFromPathId(parentPathId)
                         if descriptor.namespaceType == "component"
                             newAddress.implementation.pushToken token
-                        token = new ONMjs.AddressToken(@model, descriptor.idExtensionPoint, undefined, descriptor.id)
+                        token = new ONMjs.implementation.AddressToken(@model, descriptor.idExtensionPoint, undefined, descriptor.id)
                     newAddress.implementation.pushToken(token)
                     return newAddress
                 catch exception
@@ -354,7 +354,7 @@ class ONMjs.Model
             # --------------------------------------------------------------------------
             @createRootAddress = =>
                 try
-                    return new ONMjs.Address(@, [ new ONMjs.AddressToken(@, undefined, undefined, 0) ])
+                    return new ONMjs.Address(@, [ new ONMjs.implementation.AddressToken(@, undefined, undefined, 0) ])
                 catch exception
                     throw "ONMjs.Model.getRootAddress failure: #{exception}"
             

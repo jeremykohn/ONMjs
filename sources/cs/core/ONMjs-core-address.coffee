@@ -82,7 +82,7 @@ class ONMjs.implementation.AddressDetails
                     targetNamespaceDescriptor = @model.implementation.getNamespaceDescriptorFromPathId(pathId_)
                     if targetNamespaceDescriptor.idComponent != addressedComponentDescriptor.id
                         throw "Invalid path ID specified does not resolve to a namespace in the same component as the source address."
-                    newToken = new ONMjs.AddressToken(@model, addressedComponentToken.idExtensionPoint, addressedComponentToken.key, pathId_)
+                    newToken = new ONMjs.implementation.AddressToken(@model, addressedComponentToken.idExtensionPoint, addressedComponentToken.key, pathId_)
                     newTokenVector = @tokenVector.length > 0 and @tokenVector.slice(0, @tokenVector.length - 1) or []
                     newTokenVector.push newToken
                     newAddress = new ONMjs.Address(@model, newTokenVector)
@@ -361,7 +361,7 @@ class ONMjs.Address
                 # or to specify a reference to some other component.
 
                 if descriptor.namespaceType != "component"
-                    token = new ONMjs.AddressToken(token.model, token.idExtensionPoint, token.key, descriptor.parent.id)
+                    token = new ONMjs.implementation.AddressToken(token.model, token.idExtensionPoint, token.key, descriptor.parent.id)
                 else
                     token = (tokenSourceIndex != -1) and @implementation.tokenVector[tokenSourceIndex--] or throw "Internal error: exhausted token stack."
 
@@ -405,10 +405,10 @@ class ONMjs.Address
                 switch descriptor.namespaceType
                     when "component"
                         newAddress.implementation.pushToken(token)
-                        token = new ONMjs.AddressToken(token.model, token.namespaceDescriptor.id, undefined, pathId)
+                        token = new ONMjs.implementation.AddressToken(token.model, token.namespaceDescriptor.id, undefined, pathId)
                         break
                     else
-                        token = new ONMjs.AddressToken(token.model, token.idExtensionPoint, token.key, pathId)
+                        token = new ONMjs.implementation.AddressToken(token.model, token.idExtensionPoint, token.key, pathId)
 
             newAddress.implementation.pushToken(token)
             return newAddress
@@ -436,7 +436,7 @@ class ONMjs.Address
             descriptor = @implementation.getDescriptor()
             if descriptor.namespaceType != "extensionPoint"
                 throw "Unable to determine subcomponent to create because this address does not specifiy an extension point namespace."
-            newToken = new ONMjs.AddressToken(@model, descriptor.id, undefined, descriptor.archetypePathId)
+            newToken = new ONMjs.implementation.AddressToken(@model, descriptor.id, undefined, descriptor.archetypePathId)
             @clone().implementation.pushToken(newToken)
         catch exception
             throw "ONMjs.Address.createSubcomponentAddress failure: #{exception}"

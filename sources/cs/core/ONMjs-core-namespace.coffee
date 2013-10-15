@@ -56,7 +56,7 @@ class ONMjs.Namespace
             address = undefined
             if not (address_? and address_ and address_.implementation.tokenVector.length)
                 objectModel = store_.model
-                address = new ONMjs.Address(objectModel, [ new ONMjs.AddressToken(objectModel, undefined, undefined, 0) ] )
+                address = new ONMjs.Address(objectModel, [ new ONMjs.implementation.AddressToken(objectModel, undefined, undefined, 0) ] )
             else
                 address = address_
             
@@ -81,7 +81,7 @@ class ONMjs.Namespace
             @getResolvedToken = => @resolvedTokenArray.length and @resolvedTokenArray[@resolvedTokenArray.length - 1] or undefined
 
             for addressToken in address.implementation.tokenVector
-                tokenBinder = new ONMjs.implementation.AddressTokenBinder(store_, @dataReference, addressToken, mode)
+                tokenBinder = new ONMjs.implementation.implementation.AddressTokenBinder(store_, @dataReference, addressToken, mode)
                 @resolvedTokenArray.push tokenBinder.resolvedToken
                 @dataReference = tokenBinder.dataReference
                 if mode == "new"
@@ -211,7 +211,7 @@ class ONMjs.Namespace
 
             for key, object of @data()
                 address = @getResolvedAddress().clone()
-                token = new ONMjs.AddressToken(@store.model, resolvedToken.idNamespace, key, resolvedToken.namespaceDescriptor.archetypePathId)
+                token = new ONMjs.implementation.AddressToken(@store.model, resolvedToken.idNamespace, key, resolvedToken.namespaceDescriptor.archetypePathId)
                 address.implementation.pushToken(token)
                 try
                     callback_(address)

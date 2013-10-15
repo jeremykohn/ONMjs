@@ -89,7 +89,7 @@ class ONMjs.Store
                 @dataReference = {}
                 @objectStoreSource = "new"
 
-                token = new ONMjs.AddressToken(model_, undefined, undefined, 0)
+                token = new ONMjs.implementation.AddressToken(model_, undefined, undefined, 0)
                 tokenBinder = new ONMjs.implementation.AddressTokenBinder(@, @dataReference, token, "new")
 
 

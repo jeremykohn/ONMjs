@@ -43,17 +43,14 @@ namespaceEncapsule = Encapsule? and Encapsule or @Encapsule = {}
 Encapsule.code = Encapsule.code? and Encapsule.code or @Encapsule.code = {}
 Encapsule.code.lib = Encapsule.code.lib? and Encapsule.code.lib or @Encapsule.code.lib = {}
 Encapsule.code.lib.onm = Encapsule.code.lib.onm? and Encapsule.code.lib.onm or @Encapsule.code.lib.onm = {}
-
-
 ONMjs = Encapsule.code.lib.onm
-
-
+ONMjs.implementation = ONMjs.implementation? and ONMjs.implementation or ONMjs.implementation = {}
 
 # ****************************************************************************
 # ****************************************************************************
 #
 #
-class ONMjs.AddressToken
+class ONMjs.implementation.AddressToken
     constructor: (model_, idExtensionPoint_, key_, idNamespace_) ->
         try
             # Save a reference to the specified model.
@@ -118,12 +115,12 @@ class ONMjs.AddressToken
             return
 
         catch exception
-            throw "ONMjs.AddressToken failure: #{exception}"
+            throw "ONMjs.implementation.AddressToken failure: #{exception}"
 
     #
     # ============================================================================
     clone: =>
-        new ONMjs.AddressToken(
+        new ONMjs.implementation.AddressToken(
             @model
             @extensionPointDescriptor? and @extensionPointDescriptor and @extensionPointDescriptor.id or -1
             @key
