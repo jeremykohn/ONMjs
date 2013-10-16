@@ -149,7 +149,7 @@ then
     cat $sources_cs_observer/encapsule-lib-console.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-templates.coffee >> $onmofile
-    cat $sources_cs_observer/ONMjs-observer-host.coffee >> $onmofile
+    cat $sources_cs_observer/ONMjs-observer-context.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree-item.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-json.coffee >> $onmofile

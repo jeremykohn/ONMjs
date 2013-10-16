@@ -49,7 +49,7 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 #
 #
 # ****************************************************************************
-class ONMjs.observers.ObserverHost
+class ONMjs.observers.ObserverContext
     constructor: (logHandler_, errorHandler_) ->
         try
             @logHandler = logHandler_
@@ -65,7 +65,7 @@ class ONMjs.observers.ObserverHost
                         return true
                     false
                 catch exception
-                    throw "ONMjs.observer.ObserverHost.log failure: #{exception}"
+                    throw "ONMjs.observer.ObserverContext.log failure: #{exception}"
 
             @error = (error_) =>
                 try
@@ -85,5 +85,5 @@ class ONMjs.observers.ObserverHost
                     throw errorMessage
 
         catch exception
-            throw "ONMjs.observers.ObserverHost failure: #{exception}"
+            throw "ONMjs.observers.ObserverContext failure: #{exception}"
 
