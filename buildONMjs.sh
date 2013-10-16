@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-onm_version="0.0.10"
+onm_version="0.0.11"
 echo =================================================================
 
 lib_prefix="ONMjs-lib"
@@ -122,7 +122,7 @@ then
     cat $sources_cs_core/ONMjs-core-namespace.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-store-reifier.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-store.coffee >> $onmcfile
-    cat $sources_cs_core/ONMjs-core-cached-address.coffee >> $onmcfile
+    cat $sources_cs_core/ONMjs-core-address-store.coffee >> $onmcfile
     cat $stage_cs_core/ONMjs-core-version.coffee >> $onmcfile
 
     echo ... creating $onmofile

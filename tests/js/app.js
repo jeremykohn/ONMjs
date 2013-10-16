@@ -78,7 +78,7 @@ $(function() {
         addressStore.unregisterObserver(observerIdAddress);
         dataStore.unregisterObserver(observerIdData);
 
-        Console.message("Test app exit.");
+        Console.message("Tests passed successfully. App exiting normally.");
 
     } catch (exception) {
         Console.messageError("ONMjs Test Page failure: " + exception);
