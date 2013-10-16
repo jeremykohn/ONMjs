@@ -76,7 +76,7 @@ class ONMjs.Namespace
 
             # The actual store data.
 
-            @dataReference = store_.dataReference? and store_.dataReference or throw "Cannot resolve object store's root data reference."
+            @dataReference = store_.implementation.dataReference? and store_.implementation.dataReference or throw "Cannot resolve object store's root data reference."
             @resolvedTokenArray = []
             @getResolvedToken = => @resolvedTokenArray.length and @resolvedTokenArray[@resolvedTokenArray.length - 1] or undefined
 
@@ -89,7 +89,7 @@ class ONMjs.Namespace
                         if not (addressToken.key? and addressToken.key)
                             resolvedAddress = new ONMjs.Address(@store.model, @resolvedTokenArray)
                             componentAddress = resolvedAddress.createComponentAddress()
-                            @store.reifier.reifyStoreComponent(componentAddress)
+                            @store.implementation.reifier.reifyStoreComponent(componentAddress)
                             extensionPointAddress = componentAddress.createParentAddress()
                             extensionPointNamespace = @store.openNamespace(extensionPointAddress)
                             extensionPointNamespace.update();
@@ -179,16 +179,16 @@ class ONMjs.Namespace
             while address? and address
                 descriptor = address.implementation.getDescriptor()
                 if count == 0
-                    @store.reifier.dispatchCallback(address, "onNamespaceUpdated", undefined)
+                    @store.implementation.reifier.dispatchCallback(address, "onNamespaceUpdated", undefined)
                 else
-                    @store.reifier.dispatchCallback(address, "onSubnamespaceUpdated", undefined)
+                    @store.implementation.reifier.dispatchCallback(address, "onSubnamespaceUpdated", undefined)
 
                 if descriptor.namespaceType == "component" or descriptor.namespaceType == "root"
                    if not containingComponentNotified
-                       @store.reifier.dispatchCallback(address, "onComponentUpdated", undefined)
+                       @store.implementation.reifier.dispatchCallback(address, "onComponentUpdated", undefined)
                        containingComponentNotified = true
                    else
-                       @store.reifier.dispatchCallback(address, "onSubcomponentUpdated", undefined)
+                       @store.implementation.reifier.dispatchCallback(address, "onSubcomponentUpdated", undefined)
 
                 address = address.createParentAddress() # returns undefined if address == root namespace of the store
                 count++

@@ -63,7 +63,7 @@ class ONMjs.implementation.StoreReifier
                     if observerId_? and observerId_
                         # Use the specified observer ID to obtain the callback interface  registered with the
                         # store and then dispatch the specified callback on that interface only.
-                        callbackInterface = @store.observers[observerId_]
+                        callbackInterface = @store.implementation.observers[observerId_]
                         if not (callbackInterface? and callbackInterface)
                             throw "Internal error: unable to resolve observer ID to obtain callback interface."
                         callbackFunction = callbackInterface[callbackName_]
@@ -73,7 +73,7 @@ class ONMjs.implementation.StoreReifier
                             catch exception
                                 throw "An error occurred in the '#{callbackName_}' method of your observer interface: #{exception}"
                     else
-                        for observerId, callbackInterface of @store.observers
+                        for observerId, callbackInterface of @store.implementation.observers
                             callbackFunction = callbackInterface[callbackName_]
                             if callbackFunction? and callbackFunction
                                 try
@@ -94,7 +94,7 @@ class ONMjs.implementation.StoreReifier
                     if not (address_? and address_) then throw "Internal error: Missing address input parameter."
 
                     # Return immediately if there are no observers registered.
-                    if not Encapsule.code.lib.js.dictionaryLength(@store.observers) then return
+                    if not Encapsule.code.lib.js.dictionaryLength(@store.implementation.observers) then return
 
                     dispatchCallback = @dispatchCallback
                     dispatchCallback(address_, "onComponentCreated", observerId_)
@@ -114,7 +114,7 @@ class ONMjs.implementation.StoreReifier
                     if not (address_? and address_) then throw "Internal error: Missing address input parameter."
 
                     # Return immediately if there are no observers registered.
-                    if not Encapsule.code.lib.js.dictionaryLength(@store.observers) then return
+                    if not Encapsule.code.lib.js.dictionaryLength(@store.implementation.observers) then return
 
                     dispatchCallback = @dispatchCallback
                     address_.visitSubaddressesDescending( (addressSubnamespace_) -> dispatchCallback(addressSubnamespace_, "onNamespaceRemoved", observerId_) )
@@ -132,7 +132,7 @@ class ONMjs.implementation.StoreReifier
                     if not (address_? and address_) then throw "Internal error: Missing address input parameter."
 
                     # Return immediately if there are no observers registered.
-                    if not Encapsule.code.lib.js.dictionaryLength(@store.observers) then return
+                    if not Encapsule.code.lib.js.dictionaryLength(@store.implementation.observers) then return
 
                     dispatchCallback = @dispatchCallback
 

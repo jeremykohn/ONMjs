@@ -47,13 +47,38 @@ Encapsule.code.lib.onm.implementation = Encapsule.code.lib.onm.implementation? a
 
 ONMjs = Encapsule.code.lib.onm
 
-class ONMjs.Store
-    constructor: (model_, initialStateJSON_) ->
+
+class ONMjs.implementation.StoreDetails
+    constructor: (store_, model_, initialStateJSON_) ->
         try
+            @store = store_
+            @model = model_
+
             # Reifer "makes real" the contents of the store in the eye of the beholder (i.e. registered observers).
             # In other words, reifier traverses the contents of the stores and calls specific methods on registered
             # observer interfaces in response to various ONMjs.Store observable state change events. 
-            @reifier = new ONMjs.implementation.StoreReifier(@)
+            @reifier = new ONMjs.implementation.StoreReifier(@store)
+
+            @dataReference = undefined # the new store actual
+
+            @objectStoreSource = undefined # this is flag indicating if the store was created from a JSON string
+
+
+            # We use a map to store registered model view observers. 
+            @observers = {}
+
+            # Private (and opaque) state managed on behalf of registered model view observers.
+            @observersState = {}
+
+
+        catch exception
+            throw "ONMjs.implementation.StoreDetails failure: #{exception}"
+
+
+class ONMjs.Store
+    constructor: (model_, initialStateJSON_) ->
+        try
+            @implementation = new ONMjs.implementation.StoreDetails(@, model_, initialStateJSON_)
 
             #
             # ============================================================================
@@ -68,29 +93,19 @@ class ONMjs.Store
             @label = model_.label
             @description = model_.description
  
-            @dataReference = undefined # the new store actual
-
-            @objectStoreSource = undefined # this is flag indicating if the store was created from a JSON string
-
-            # We use a map to store registered model view observers. 
-            @observers = {}
-
-            # Private (and opaque) state managed on behalf of registered model view observers.
-            @observersState = {}
-
             if initialStateJSON_? and initialStateJSON_
                 parsedObject = JSON.parse(initialStateJSON_)
-                @objectStore = parsedObject[@jsonTag]
-                if not (@objectStore? and @objectStore)
+                @implemenetation.dataReference = parsedObject[@jsonTag]
+                if not (@implementation.dataReference? and @imlementation.dataReference)
                     throw "Cannot deserialize specified JSON string!"
-                @objectStoreSource = "json"
+                @implementation.objectStoreSource = "json"
                 
             else
-                @dataReference = {}
-                @objectStoreSource = "new"
-
+                @implementation.dataReference = {}
+                @implementation.objectStoreSource = "new"
+                # Low-level create of the root component.
                 token = new ONMjs.implementation.AddressToken(model_, undefined, undefined, 0)
-                tokenBinder = new ONMjs.implementation.AddressTokenBinder(@, @dataReference, token, "new")
+                tokenBinder = new ONMjs.implementation.AddressTokenBinder(@, @implementation.dataReference, token, "new")
 
 
             #
@@ -138,8 +153,8 @@ class ONMjs.Store
                     # Unrefify the component before actually making any modifications to the store.
                     # modelViewObserver_ == undefined -> broadcast to all registered observers
                     # undoFlag_ == true -> invert namespace traversal order and invoke remove callbacks
-                    @reifier.reifyStoreExtensions(address_, undefined, true)
-                    @reifier.unreifyStoreComponent(address_)
+                    @implementation.reifier.reifyStoreExtensions(address_, undefined, true)
+                    @implementation.reifier.unreifyStoreComponent(address_)
                     componentNamespace = @openNamespace(address_)
                     extensionPointAddress = address_.createParentAddress()
                     extensionPointNamespace = @openNamespace(extensionPointAddress)
@@ -202,7 +217,7 @@ class ONMjs.Store
                     observerIdCode = uuid.v4()
 
                     # Affect the registration using the observer ID as the key and the caller's modelViewObject_ by reference.
-                    @observers[observerIdCode] = observerCallbackInterface_
+                    @implementation.observers[observerIdCode] = observerCallbackInterface_
 
                     # The root namespace of an object store always exists and comprises the base of the root component -
                     # a hierarchy of sub-namespaces defined as the set of all descendents including extension point
@@ -211,19 +226,19 @@ class ONMjs.Store
                     # Get the store's root address.
                     rootAddress = @model.createRootAddress()
 
-                    @reifier.dispatchCallback(undefined, "onObserverAttachBegin", observerIdCode)
+                    @implementation.reifier.dispatchCallback(undefined, "onObserverAttachBegin", observerIdCode)
 
                     # Reify the store's root component in the eye of the observer. Not that this function
                     # also reifieis all of the component's descendant namespaces as well.
-                    @reifier.reifyStoreComponent(rootAddress, observerIdCode)
+                    @implementation.reifier.reifyStoreComponent(rootAddress, observerIdCode)
 
                     # Enumerate and reify this component's subcomponents contained in its extension points.
                     # Note that this process is repeated for every component discovered until all descendant
                     # subcomponents of the specified component have been enumerated and reified in the eye
                     # of the observer.
-                    @reifier.reifyStoreExtensions(rootAddress, observerIdCode)
+                    @implementation.reifier.reifyStoreExtensions(rootAddress, observerIdCode)
 
-                    @reifier.dispatchCallback(undefined, "onObserverAttachEnd", observerIdCode)
+                    @implementation.reifier.dispatchCallback(undefined, "onObserverAttachEnd", observerIdCode)
 
                     return observerIdCode
 
@@ -236,25 +251,25 @@ class ONMjs.Store
                 try
                     if not (observerIdCode_? and observerIdCode_) then throw "Missing observer ID code input parameter!"
 
-                    registeredObserver = @observers[observerIdCode_]
+                    registeredObserver = @implementation.observers[observerIdCode_]
 
                     if not (registeredObserver? and registeredObserver)
                         throw "Unknown observer ID code provided. No registration to remove."
 
-                    @reifier.dispatchCallback(undefined, "onObserverDetachBegin", observerIdCode_)
+                    @implementation.reifier.dispatchCallback(undefined, "onObserverDetachBegin", observerIdCode_)
 
                     # Get the store's root address.
                     rootAddress = @model.createRootAddress()
 
-                    @reifier.reifyStoreExtensions(rootAddress, observerIdCode_, true)
-                    @reifier.unreifyStoreComponent(rootAddress, observerIdCode_)
+                    @implementation.reifier.reifyStoreExtensions(rootAddress, observerIdCode_, true)
+                    @implementation.reifier.unreifyStoreComponent(rootAddress, observerIdCode_)
 
-                    @reifier.dispatchCallback(undefined, "onObserverDetachEnd", observerIdCode_)
+                    @implementation.reifier.dispatchCallback(undefined, "onObserverDetachEnd", observerIdCode_)
 
                     @removeObserverState(observerIdCode_)
 
                     # Remove the registration.
-                    delete @observers[observerIdCode_]
+                    delete @implementation.observers[observerIdCode_]
 
                 catch exception
                     throw "ONMjs.Store.unregisterObserver failure: #{exception}"
@@ -264,7 +279,7 @@ class ONMjs.Store
             @openObserverState = (observerId_) =>
                 try
                     if not (observerId_? and observerId_) then throw "Missing observer ID parameter!"
-                    observerState = @observersState[observerId_]? and @observersState[observerId_] or @observersState[observerId_] = []
+                    observerState = @implementation.observersState[observerId_]? and @implementation.observersState[observerId_] or @implementation.observersState[observerId_] = []
                     return observerState                    
 
                 catch exception
@@ -275,8 +290,8 @@ class ONMjs.Store
             @removeObserverState = (observerId_) =>
                 if not (observerId_? and observerId_) then throw "Missing observer ID parameter!"
                 if observerState? and observerState
-                    if @observerState[observerId_]? and @observerState[observerId_]
-                        delete @observerState[observerId_]
+                    if @implementation.observerState[observerId_]? and @implementation.observerState[observerId_]
+                        delete @implementation.observerState[observerId_]
                 @
 
             #
