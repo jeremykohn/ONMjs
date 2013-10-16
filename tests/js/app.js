@@ -117,6 +117,19 @@ $(function() {
         addressStore.unregisterObserver(observerIdAddress);
         dataStore.unregisterObserver(observerIdData);
 
+        var logHandler = function (html_) {
+            $("#idLog").append(html_);
+        };
+
+        var errorHandler = function (error_) {
+            logHandler(error_);
+            alert(error_);
+        };
+
+        var observerHost = new ONMjs.observers.ObserverHost(logHandler, errorHandler)
+
+        observerHost.log("This is a test log message");
+        observerHost.error("This is an intentional error.");
 
 
         Console.message("Tests passed successfully. App exiting normally.");
