@@ -53,10 +53,10 @@ $(function() {
         var address = dataModel.createPathAddress("addressBook.contacts");
 
         Console.message("Creating an ONMjs address store.");
-        var addressStore = new ONMjs.CachedAddress(dataStore, address);
+        var addressStore = new ONMjs.AddressStore(dataStore, address);
 
         Console.message("Creating generic observer.");
-        var genericObserver = new ONMjs.test.observers.Canary();
+        var genericObserver = new ONMjs.observers.GenericTest();
 
         Console.message("Attaching observers...");
         var observerIdData = dataStore.registerObserver(genericObserver.callbackInterface, "Data Store Observer");

@@ -45,49 +45,47 @@ Encapsule.code.lib = Encapsule.code.lib? and Encapsule.code.lib or @Encapsule.co
 Encapsule.code.lib.onm = Encapsule.code.lib.onm? and Encapsule.code.lib.onm or @Encapsule.code.lib.onm = {}
 
 ONMjs = Encapsule.code.lib.onm
-ONMjs.test = {}
-ONMjs.test.observers = {}
+ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 
-class ONMjs.test.observers.Canary
+class ONMjs.observers.GenericTest
     constructor: ->
 
     callbackInterface: {
 
         onObserverAttachBegin: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onObserverAttachBegin")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachBegin")
 
         onObserverAttachEnd: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onObserverAttachEnd")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachEnd")
 
         onObserverDetachBegin: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onObserverDetachBegin")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachBegin")
 
         onObserverDetachEnd: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onObserverDetachEnd")
-
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachEnd")
 
         onComponentCreated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onComponentCreated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentCreated(#{address_.getHumanReadableString()})")
 
         onComponentUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onComponentUpdated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentUpdated(#{address_.getHumanReadableString()})")
 
         onComponentRemoved: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onComponentRemoved(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentRemoved(#{address_.getHumanReadableString()})")
 
         onNamespaceCreated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onNamespaceCreated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceCreated(#{address_.getHumanReadableString()})")
 
         onNamespaceUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onNamespaceUpdated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceUpdated(#{address_.getHumanReadableString()})")
 
         onNamespaceRemoved: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onNamespaceRemoved(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceRemoved(#{address_.getHumanReadableString()})")
 
         onSubNamespaceUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onSubNamespaceUpdated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubNamespaceUpdated(#{address_.getHumanReadableString()})")
 
         onSubComponentUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}::#{observerId_}::onSubComponentUpdated(#{address_.getHumanReadableString()})")
+            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubComponentUpdated(#{address_.getHumanReadableString()})")
 
     }       

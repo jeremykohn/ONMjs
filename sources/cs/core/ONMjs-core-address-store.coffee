@@ -45,7 +45,7 @@ Encapsule.code.lib.onm = Encapsule.code.lib.onm? and Encapsule.code.lib.onm or @
 
 ONMjs = Encapsule.code.lib.onm
 
-class ONMjs.CachedAddress extends ONMjs.Store
+class ONMjs.AddressStore extends ONMjs.Store
     constructor: (referenceStore_, address_) ->
         try
             if not (referenceStore_? and referenceStore_) then throw "Missing object store input parameter. Unable to determine external selector type."
@@ -54,7 +54,7 @@ class ONMjs.CachedAddress extends ONMjs.Store
             # Create an ObjectModel instance from the selector object model declaration.
             selectorModel = new ONMjs.Model(
                 {
-                    jsonTag: "cachedAddress"
+                    jsonTag: "addressStore"
                     label: "#{referenceStore_.model.jsonTag} Address Cache"
                     description: "#{referenceStore_.model.label} observable address cache."
                 })
@@ -77,7 +77,7 @@ class ONMjs.CachedAddress extends ONMjs.Store
                             @setAddress(address_)
 
                     catch exception
-                        throw "ONMjs.CachedAddress.objectStoreCallbacks.onNamespaceUpdated failure: #{exception}"
+                        throw "ONMjs.AddressStore.objectStoreCallbacks.onNamespaceUpdated failure: #{exception}"
 
 
                 onNamespaceRemoved: (objectStore_, observerId_, address_) =>
@@ -88,12 +88,12 @@ class ONMjs.CachedAddress extends ONMjs.Store
                             @setAddress(parentAddress)
                         return
                     catch exception
-                        throw "ONMjs.CachedAddress.objectStoreCallbacks.onNamespaceRemoved failure: #{exception}"
+                        throw "ONMjs.AddressStore.objectStoreCallbacks.onNamespaceRemoved failure: #{exception}"
             } # objectStoreCallbacks
 
 
         catch exception
-            throw "ONMjs.CachedAddress failure: #{exception}"
+            throw "ONMjs.AddressStore failure: #{exception}"
 
 
     #
@@ -105,7 +105,7 @@ class ONMjs.CachedAddress extends ONMjs.Store
             return namespace.getResolvedAddress()
 
         catch exception
-            throw "ONMjs.CachedAddress.getSelector failure: #{exception}"
+            throw "ONMjs.AddressStore.getSelector failure: #{exception}"
 
 
     #
@@ -120,7 +120,7 @@ class ONMjs.CachedAddress extends ONMjs.Store
             @selectorNamespace.update()
 
         catch exception
-            throw "ONMjs.CachedAddress.setAddress failure: #{exception}"
+            throw "ONMjs.AddressStore.setAddress failure: #{exception}"
 
 
 
