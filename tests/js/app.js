@@ -18,7 +18,16 @@ $(function() {
             jsonTag: "addressBook",
             ____label: "Address Book",
             ____description: "Address book data object.",
-
+            namespaceProperties: {
+                userImmutable: {
+                    key: { fnCreate: function() { return uuid.v4() } },
+                    revision: { fnCreate: function() { return 0 } }
+                },
+                userMutable: {
+                    label: { fnCreate: function() { return "default address book label" } },
+                    description: { fnCreate: function() { return "default address book description" } }
+                }
+            },
             subNamespaces: [
                 {
                     namespaceType: "extensionPoint",
@@ -29,14 +38,29 @@ $(function() {
                         namespaceType: "component",
                         jsonTag: "contact",
                         ____label: "Contact",
-                        ____description: "An address book contact data object."
+                        ____description: "An address book contact data object.",
+                        namespaceProperties: {
+                            userImmutable: {
+                                key: { fnCreate: function() { return uuid.v4() } },
+                                revision: { fnCreate: function() { return 0 } }
+                            },
+                            userMutable: {
+                                nameFirst: { fnCreate: function() { return "first" } },
+                                nameLast: { fnCreate: function() { return "last" } }
+                            }
+                        }
                     }
                 }
             ],
             semanticBindings: {
                 getUniqueKey: function(data_) {
-                    data_.key = uuid.v4();
                     return data_.key;
+                },
+                update: function(data_) {
+                    if (data_.revision != null) {
+                        data_.revision++;
+                    }
+                    return true;
                 }
             }
          
@@ -72,11 +96,28 @@ $(function() {
 
         addressStore.setAddress(newContactNamespace.getResolvedAddress());
 
+        Console.message("Serializing address book store to JSON...");
+        var jsonString = dataStore.toJSON();
+        Console.message(jsonString);
+
+        Console.message("Creating a new store from the serialized JSON...");
+        var testStore = new ONMjs.Store(dataModel, jsonString);
+
+        Console.message("Serializing the new store to JSON...");
+        var jsonString2 = testStore.toJSON();
+
+        Console.message("Comparing the two JSON strings: they should be the same!");
+        if (jsonString != jsonString2) {
+            throw "Deserialization test fail.";
+        }
+
         Console.message("Tests completed successfully.");
 
         Console.message("Detaching observers...");
         addressStore.unregisterObserver(observerIdAddress);
         dataStore.unregisterObserver(observerIdData);
+
+
 
         Console.message("Tests passed successfully. App exiting normally.");
 
