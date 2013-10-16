@@ -56,7 +56,6 @@ class ONMjs.observers.implementation.SelectedPathElementModelView
             @objectStoreAddress = objectStoreAddress_
             @isSelected = (count_ == selectedCount_)
             objectStoreNamespace = addressCache_.referenceStore.openNamespace(objectStoreAddress_)
-            objectStoreDescriptor = objectStoreNamespace.getResolvedToken().namespaceDescriptor
             resolvedLabel = objectStoreNamespace.getResolvedLabel()
 
             @prefix = ""
@@ -78,7 +77,7 @@ class ONMjs.observers.implementation.SelectedPathElementModelView
                 @label += """<span class="selected">#{resolvedLabel}</span>"""
             else
                 styleClasses = "parent classONMjsMouseOverPointer"
-                if objectStoreDescriptor.isComponent
+                if objectStoreAddress_.getModel().namespaceType == "component"
                     styleClasses += " component"
                 @label += """<span class="#{styleClasses}">#{resolvedLabel}</span>"""
 
