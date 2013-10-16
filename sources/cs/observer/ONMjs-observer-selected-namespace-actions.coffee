@@ -51,19 +51,20 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 #
 # ============================================================================
 class ONMjs.observers.SelectedNamespaceActionsModelView
-    constructor: (params_) ->
+    constructor: (params_, observerContext_) ->
         try
+            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
 
             #
             # ============================================================================
             @onClickAddSubcomponent = (prefix_, label_, address_, selectorStore_, options_) =>
                 try
-                    Console.message("ObjectModelNavigatorNamespaceActions.onClickAddSubcomponent starting...")
+                    @observerContext.log("ObjectModelNavigatorNamespaceActions.onClickAddSubcomponent starting...")
                     componentNamespace = selectorStore_.referenceStore.createComponent(address_)
                     selectorStore_.setAddress(componentNamespace.getResolvedAddress())
 
                 catch exception
-                    Console.messageError("ONMjs.observers.SelectedNamespaceActionsModelView.onClickAddSubcomponent failure: #{exception}")
+                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickAddSubcomponent failure: #{exception}")
 
             #
             # ============================================================================
@@ -80,7 +81,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                     selectorStore_.referenceStore.removeComponent(address_)
 
                 catch exception
-                    Console.messageError("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveComponent failure: #{exception}")
+                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveComponent failure: #{exception}")
 
             #
             # ============================================================================
@@ -102,7 +103,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                         store.removeComponent(address)
 
                 catch exception
-                    Console.messageError("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveAllSubcomponents failure: #{exception}")
+                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveAllSubcomponents failure: #{exception}")
 
             #
             # ============================================================================

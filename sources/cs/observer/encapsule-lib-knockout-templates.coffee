@@ -88,7 +88,6 @@ Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplates = (windowManagerId_) -
 
         # Insert the HTML templates into the DOM
         for descriptor in Encapsule.runtime.app.kotemplates
-            Console.message "Window manager caching view template: #{descriptor.selectorId_}"
             Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate(descriptor, templateCacheEl)
 
         # Return the document element node of the window manager host span. This is what we bind the window manager to.

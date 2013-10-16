@@ -92,6 +92,9 @@ $(function() {
         observerContext.log("Creating an ONMjs address store.");
         var addressStore = new ONMjs.AddressStore(dataStore, address);
 
+        observerContext.log("Registering the address store as an observer of the data store.");
+        var addressStoreObserverId = dataStore.registerObserver(addressStore.objectStoreCallbacks, addressStore);
+
         observerContext.log("Creating generic observer.");
         var genericObserver = new ONMjs.observers.GenericTest(observerContext);
 
@@ -124,6 +127,27 @@ $(function() {
             throw "Deserialization test fail.";
         }
 
+
+        observerContext.log("Creating an ONMjs.observers.NavigatorModelView instance.");
+        var observerNavigator = new ONMjs.observers.NavigatorModelView(observerContext);
+        observerNavigator.attachToStore(dataStore);
+        observerNavigator.attachToCachedAddress(addressStore);
+
+        observerContext.log("Creating an ONMjs.observers.SelectedPathModelView instance.");
+        var observerSelectedPath = new ONMjs.observers.SelectedPathModelView(observerContext);
+        observerSelectedPath.attachTo(addressStore);
+
+        observerContext.log("Creating an ONMjs.observers.SelectedNamespaceModelView instance.");
+        var observerSelectedNamespace = new ONMjs.observers.SelectedNamespaceModelView(observerContext);
+        observerSelectedNamespace.attachToCachedAddress(addressStore);
+
+        observerContext.log("Creating an ONMjs.observers.SelectedJsonModelView instance.");
+        var observerSelectedJSON = new ONMjs.observers.SelectedJsonModelView(observerContext);
+        observerSelectedJSON.attachToCachedAddress(addressStore);
+
+
+
+
         observerContext.log("Tests completed successfully.");
 
         observerContext.log("Detaching observers...");
@@ -131,10 +155,11 @@ $(function() {
         dataStore.unregisterObserver(observerIdData);
 
 
-        observerContext.log("Tests passed successfully. App exiting normally.");
+        observerContext.log("TESTS PASSED.");
 
     } catch (exception) {
         observerContext.error("ONMjs Test Page failure: " + exception);
+        observerContext.log("TESTS FAILED.");
     }
 
 });

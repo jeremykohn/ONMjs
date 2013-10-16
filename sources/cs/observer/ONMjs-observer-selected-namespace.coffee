@@ -56,8 +56,10 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 # ******************************************************************************
 
 class ONMjs.observers.SelectedNamespaceModelView
-    constructor: ->
+    constructor: (observerContext_) ->
         try
+
+            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
 
             @objectStoreName = ko.observable "<not connected>"
 

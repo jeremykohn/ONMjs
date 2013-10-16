@@ -50,9 +50,10 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 
 
 class ONMjs.observers.NavigatorModelView
-    constructor: ->
+    constructor: (observerContext_) ->
         # \ BEGIN: constructor
         try
+            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
             @objectStore = undefined
             @rootMenuModelView = undefined
 
@@ -148,7 +149,7 @@ class ONMjs.observers.NavigatorModelView
                 # ----------------------------------------------------------------------------
                 onObserverAttachBegin: (store_, observerId_) =>
                     try
-                        Console.message("ONMjs.observer.NavigatorModelview is now observing ONMjs.Store.")
+                        @observerContext.log("ONMjs.observer.NavigatorModelview is now observing ONMjs.Store.")
                         if @storeObserverId? and @storeObserverId
                             throw "This navigator instance is already observing an ONMjs.Store."
                         @storeObserverId = observerId_
@@ -160,7 +161,7 @@ class ONMjs.observers.NavigatorModelView
                 # ----------------------------------------------------------------------------
                 onObserverDetachEnd: (store_, observerId_) =>
                     try
-                        Console.message("ONMjs.observers.NavigatorModelView is no longer observing ONMjs.Store.")
+                        @observerContext.log("ONMjs.observers.NavigatorModelView is no longer observing ONMjs.Store.")
                         if not (@storeObserverId? and @storeObserverId)
                             throw "Internal error: received detach callback but it doesn't apprear we're attached?"
                         if @storeObserverId != observerId_

@@ -47,8 +47,10 @@ ONMjs = Encapsule.code.lib.onm
 
 
 class ONMjs.observers.SelectedJsonModelView
-    constructor: ->
+    constructor: (observerContext_) ->
         try
+            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+
             @title = ko.observable "<not connected>"
             @selectorHash = ko.observable "<not connected>"
             @jsonString = ko.observable "<not connected>"

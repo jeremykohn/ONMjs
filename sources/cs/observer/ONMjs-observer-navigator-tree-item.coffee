@@ -51,11 +51,14 @@ ONMjs.observers.implementation = ONMjs.observers.implementation? and ONMjs.obser
 
 class ONMjs.observers.implementation.NavigatorItemModelView
 
-    constructor: (store_, navigatorModelView_, address_) ->
+    constructor: (store_, navigatorModelView_, address_, observerContext_) ->
 
         # \ BEGIN: constructor scope
         try
             # \ BEGIN: constructor try scope
+
+            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+
             if not (store_? and store_)
                 throw "Missing object store input parameter."
             if not (navigatorModelView_? and navigatorModelView_)
@@ -80,7 +83,7 @@ class ONMjs.observers.implementation.NavigatorItemModelView
                 try
                     @navigatorModelView.routeUserSelectAddressRequest(@address)
                 catch exception
-                    Console.messageError("ONMjs.observers.implementation.PathElementModelView.onClick failure: #{exception}")
+                    @observerContext.error("ONMjs.observers.implementation.PathElementModelView.onClick failure: #{exception}")
 
 
             #
