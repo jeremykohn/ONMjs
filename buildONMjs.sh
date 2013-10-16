@@ -146,7 +146,6 @@ then
 
     echo ... creating $onmofile
     touch $onmofile
-    cat $sources_cs_observer/encapsule-lib-console.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-templates.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-context.coffee >> $onmofile

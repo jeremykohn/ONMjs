@@ -30,7 +30,9 @@ BLOG: http://blog.encapsule.org TWITTER: https://twitter.com/Encapsule
 
 ------------------------------------------------------------------------------
 
-Canary is a test observer that observes a ONMjs.Store and sings to the console logger.
+GenericTest implements handlers for all signals defined by ONMjs. Once registered
+with an ONMjs.Store, GenericTest serializes telemetry information back via
+ObserverContext.log.
 
 ------------------------------------------------------------------------------
 
@@ -48,44 +50,44 @@ ONMjs = Encapsule.code.lib.onm
 ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 
 class ONMjs.observers.GenericTest
-    constructor: ->
+    constructor: (observerContext_) ->
+        @observerContext = observerContext_? and observerContext_ or new ONMjs.observers.ObserverContext();
 
-    callbackInterface: {
+        @callbackInterface = {
 
-        onObserverAttachBegin: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachBegin")
+            onObserverAttachBegin: (store_, observerId_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachBegin")
 
-        onObserverAttachEnd: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachEnd")
+            onObserverAttachEnd: (store_, observerId_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverAttachEnd")
 
-        onObserverDetachBegin: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachBegin")
+            onObserverDetachBegin: (store_, observerId_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachBegin")
 
-        onObserverDetachEnd: (store_, observerId_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachEnd")
+            onObserverDetachEnd: (store_, observerId_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onObserverDetachEnd")
 
-        onComponentCreated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentCreated(#{address_.getHumanReadableString()})")
+            onComponentCreated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentCreated(#{address_.getHumanReadableString()})")
 
-        onComponentUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentUpdated(#{address_.getHumanReadableString()})")
+            onComponentUpdated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentUpdated(#{address_.getHumanReadableString()})")
 
-        onComponentRemoved: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentRemoved(#{address_.getHumanReadableString()})")
+            onComponentRemoved: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onComponentRemoved(#{address_.getHumanReadableString()})")
 
-        onNamespaceCreated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceCreated(#{address_.getHumanReadableString()})")
+            onNamespaceCreated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceCreated(#{address_.getHumanReadableString()})")
 
-        onNamespaceUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceUpdated(#{address_.getHumanReadableString()})")
+            onNamespaceUpdated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceUpdated(#{address_.getHumanReadableString()})")
 
-        onNamespaceRemoved: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceRemoved(#{address_.getHumanReadableString()})")
+            onNamespaceRemoved: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onNamespaceRemoved(#{address_.getHumanReadableString()})")
 
-        onSubNamespaceUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubNamespaceUpdated(#{address_.getHumanReadableString()})")
+            onSubNamespaceUpdated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubNamespaceUpdated(#{address_.getHumanReadableString()})")
 
-        onSubComponentUpdated: (store_, observerId_, address_) =>
-            Console.message("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubComponentUpdated(#{address_.getHumanReadableString()})")
-
-    }       
+            onSubComponentUpdated: (store_, observerId_, address_) =>
+                @observerContext.log("ONMjs_#{store_.jsonTag}Observer::#{observerId_}::onSubComponentUpdated(#{address_.getHumanReadableString()})")
+        }       
