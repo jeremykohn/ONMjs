@@ -59,7 +59,7 @@ class ONMjs.implementation.StoreDetails
             # observer interfaces in response to various ONMjs.Store observable state change events. 
             @reifier = new ONMjs.implementation.StoreReifier(@store)
 
-            @dataReference = undefined # the new store actual
+            @dataReference = {} # the new store actual
 
             @objectStoreSource = undefined # this is flag indicating if the store was created from a JSON string
 
@@ -94,9 +94,8 @@ class ONMjs.Store
             @description = model_.description
  
             if initialStateJSON_? and initialStateJSON_
-                parsedObject = JSON.parse(initialStateJSON_)
-                @implemenetation.dataReference = parsedObject[@jsonTag]
-                if not (@implementation.dataReference? and @imlementation.dataReference)
+                @implementation.dataReference = JSON.parse(initialStateJSON_)
+                if not (@implementation.dataReference? and @implementation.dataReference)
                     throw "Cannot deserialize specified JSON string!"
                 @implementation.objectStoreSource = "json"
                 
