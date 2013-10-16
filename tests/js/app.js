@@ -118,7 +118,7 @@ $(function() {
         dataStore.unregisterObserver(observerIdData);
 
         var logHandler = function (html_) {
-            $("#idLog").append(html_);
+            $("#idLog").append("&gt; " + html_ + "<br>");
         };
 
         var errorHandler = function (error_) {

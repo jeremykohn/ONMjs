@@ -56,9 +56,14 @@ Encapsule.code.lib.js.clone = (object_) ->
         # / END: try
 
     catch exception
-        Console.message("Encapsule.code.lib.js.clone: #{exception}")
+        throw "Encapsule.code.lib.js.clone: #{exception}"
+
     # / END: clone function
 
 
-Encapsule.code.lib.js.dictionaryLength = (dictionary_) -> Object.keys(dictionary_).length
+Encapsule.code.lib.js.dictionaryLength = (dictionary_) ->
+    try
+        Object.keys(dictionary_).length
+    catch exception
+        throw "Encapsule.code.lib.js.dictionaryLength: #{exception}"
 
