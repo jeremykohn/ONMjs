@@ -45,12 +45,37 @@ Encapsule.code.lib = Encapsule.code.lib? and Encapsule.code.lib or @Encapsule.co
 Encapsule.code.lib.onm = Encapsule.code.lib.onm? and Encapsule.code.lib.onm or @Encapsule.code.lib.onm = {}
 
 ONMjs = Encapsule.code.lib.onm
+ONMjs.implementation = ONMjs.implementation? and ONMjs.implementation or ONMjs.implementation = {}
 
+#
+#
+# ****************************************************************************
+class ONMjs.implementation.NamespaceDetails
+    constructor: (namespace_, store_, address_, mode_) ->
+        try
+            #@namespace = namespace_
+            #@store = store_
+            #@address = address_
+            #@mode = mode_
+            @dataReference = store_.implementation.dataReference? and store_.implementation.dataReference or throw "Cannot resolve object store's root data reference."
+            @resolvedTokenArray = []
+            @getResolvedToken = => @resolvedTokenArray.length and @resolvedTokenArray[@resolvedTokenArray.length - 1] or undefined
+            @resolvedAddress = undefined
+
+
+        catch exception
+            throw "ONMjs.implementation.NamespaceDetails failure: #{exception}"
+
+#
+#
+# ****************************************************************************
 class ONMjs.Namespace
     constructor: (store_, address_, mode_) ->
         try
             if not (store_? and store_) then throw "Missing object store input parameter."
             @store = store_
+
+            @implementation = new ONMjs.implementation.NamespaceDetails(@, store_, address_, mode_)
 
             # As a matter of policy, if no address is specified or if a zero-length address is specified, open the root namespace.
             address = undefined
@@ -76,26 +101,20 @@ class ONMjs.Namespace
 
             # The actual store data.
 
-            @dataReference = store_.implementation.dataReference? and store_.implementation.dataReference or throw "Cannot resolve object store's root data reference."
-            @resolvedTokenArray = []
-            @getResolvedToken = => @resolvedTokenArray.length and @resolvedTokenArray[@resolvedTokenArray.length - 1] or undefined
-
             for addressToken in address.implementation.tokenVector
-                tokenBinder = new ONMjs.implementation.AddressTokenBinder(store_, @dataReference, addressToken, mode)
-                @resolvedTokenArray.push tokenBinder.resolvedToken
-                @dataReference = tokenBinder.dataReference
+                tokenBinder = new ONMjs.implementation.AddressTokenBinder(store_, @implementation.dataReference, addressToken, mode)
+                @implementation.resolvedTokenArray.push tokenBinder.resolvedToken
+                @implementation.dataReference = tokenBinder.dataReference
                 if mode == "new"
                     if addressToken.idComponent 
                         if not (addressToken.key? and addressToken.key)
-                            resolvedAddress = new ONMjs.Address(@store.model, @resolvedTokenArray)
+                            resolvedAddress = new ONMjs.Address(@store.model, @implementation.resolvedTokenArray)
                             componentAddress = resolvedAddress.createComponentAddress()
                             @store.implementation.reifier.reifyStoreComponent(componentAddress)
                             extensionPointAddress = componentAddress.createParentAddress()
                             extensionPointNamespace = @store.openNamespace(extensionPointAddress)
                             extensionPointNamespace.update();
                 true
-
-            @resolvedAddress = undefined
 
         catch exception
             throw "ONMjs.Namespace failure: #{exception}"
@@ -104,10 +123,10 @@ class ONMjs.Namespace
     # ============================================================================
     getResolvedAddress: =>
         try
-            if @resolvedAddress? and @resolvedAddress
-                return @resolvedAddress
-            @resolvedAddress = new ONMjs.Address(@store.model, @resolvedTokenArray)
-            return @resolvedAddress
+            if @implementation.resolvedAddress? and @implementation.resolvedAddress
+                return @implementation.resolvedAddress
+            @implementation.resolvedAddress = new ONMjs.Address(@store.model, @implementation.resolvedTokenArray)
+            return @implementation.resolvedAddress
         catch exception
             throw "ONMjs.Namespace.address failure: #{exception}"
 
@@ -116,7 +135,7 @@ class ONMjs.Namespace
     # ============================================================================
     getResolvedLabel: =>
         try
-            resolvedDescriptor = @getResolvedToken().namespaceDescriptor
+            resolvedDescriptor = @implementation.getResolvedToken().namespaceDescriptor
             semanticBindings = @store.model.getSemanticBindings()
             getLabelBinding = semanticBindings? and semanticBindings and semanticBindings.getLabel? and semanticBindings.getLabel or undefined
             resolvedLabel = undefined
@@ -132,14 +151,14 @@ class ONMjs.Namespace
 
     #
     # ============================================================================
-    data: => @dataReference
+    data: => @implementation.dataReference
 
 
     #
     # ============================================================================
     toJSON: (replacer_, space_) =>
         try
-            namespaceDescriptor = @getResolvedToken().namespaceDescriptor
+            namespaceDescriptor = @implementation.getResolvedToken().namespaceDescriptor
             resultObject = {}
             resultObject[namespaceDescriptor.jsonTag] = @data()
             space = space_? and space_ or 0
@@ -203,7 +222,7 @@ class ONMjs.Namespace
     # ============================================================================
     visitExtensionPointSubcomponents: (callback_) =>
         try
-            resolvedToken = @getResolvedToken()
+            resolvedToken = @implementation.getResolvedToken()
             if not (resolvedToken? and resolvedToken) then throw "Internal error: unable to resolve token."
 
             if resolvedToken.namespaceDescriptor.namespaceType != "extensionPoint"

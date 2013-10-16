@@ -62,13 +62,13 @@ $(function() {
         var observerIdData = dataStore.registerObserver(genericObserver.callbackInterface, "Data Store Observer");
         var observerIdAddress = addressStore.registerObserver(genericObserver.callbackInterface, "Address Store Observer");
 
-        newContactAddress  = dataModel.createPathAddress("addressBook.contacts.contact");
+        var newContactAddress  = dataModel.createPathAddress("addressBook.contacts.contact");
 
         Console.message("Creating new contact in address book.");
-        newContactNamespace = dataStore.createComponent(newContactAddress);
+        var newContactNamespace = dataStore.createComponent(newContactAddress);
 
         Console.message("Creating new contact in address book.");
-        newContactNamespace = dataStore.createComponent(newContactAddress);
+        var newContactNamespace = dataStore.createComponent(newContactAddress);
 
         addressStore.setAddress(newContactNamespace.getResolvedAddress());
 
