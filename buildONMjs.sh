@@ -76,6 +76,25 @@ echo app_build_uuid=$app_build_uuid
 
 echo =================================================================
 
+if [ ! -d $lib ]
+then
+    echo Creating new lib directory...
+    mkdir $lib
+    mkdir $lib_latest
+    mkdir $lib_release
+fi
+
+if [ -d $lib_latest ]
+then
+    echo Removing old lib directory...
+    rm -rf $lib_latest
+fi
+
+if [ ! -d $lib_latest ]
+then
+    mkdir $lib_latest
+fi
+
 if [ -d $stage ]
 then
     echo Removing old staging directory...
@@ -219,6 +238,12 @@ if [ "$1" = "release" ]
 then
 echo "RELEASING..."
 
+if [ -d $lib_release ]
+then
+    rm -rf $lib_release
+    mkdir $lib_release
+fi
+
 cp $stage_js/ONMjs-lib-core-debug*.js $lib_release/
 cp $stage_js/ONMjs-lib-core-min*.js $lib_release/
 
@@ -231,6 +256,10 @@ cp $stage_js/ONMjs-lib-min*.js $lib_release/
 
 fi
 
+echo =================================================================
+echo =================================================================
+echo =================================================================
+find lib/
 echo =================================================================
 echo =================================================================
 echo =================================================================
