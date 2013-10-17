@@ -149,11 +149,11 @@ then
     touch $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-templates.coffee >> $onmofile
+    cat $sources_cs_observer/ONMjs-observer-generic-test.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree-item.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-json.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-path.coffee >> $onmofile
-    cat $sources_cs_observer/ONMjs-observer-canary-test.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-actions.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-children.coffee >> $onmofile
