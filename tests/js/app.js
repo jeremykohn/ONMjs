@@ -8,25 +8,23 @@ $(function() {
 
         var ONMjs = Encapsule.code.lib.onm;
 
-        var logHandler = function (html_) {
+        var log = function (html_) {
             $("#idLog").append("&gt; " + html_ + "<br>");
         };
 
-        var errorHandler = function (error_) {
+        var error = function (error_) {
             $("BODY").css( { backgroundColor: "#FFEEDD" } );
             $("#idLog").css( { backgroundColor: "#FFDDCC" } );
-            logHandler(error_);
+            log(error_);
             alert(error_);
         };
 
-        var observerContext = new Encapsule.code.lib.base.BackChannel(logHandler, errorHandler)
+        var backchannel = new Encapsule.code.lib.base.BackChannel(log, error)
 
-
-
-        observerContext.log("ONMjs.about.version=" + ONMjs.about.version);
-        observerContext.log("ONMjs.about.uuid=" + ONMjs.about.uuid);
-        observerContext.log("ONMjs.about.build=" + ONMjs.about.build);
-        observerContext.log("ONMjs.about.epoch=" + ONMjs.about.epoch);
+        log("ONMjs.about.version=" + ONMjs.about.version);
+        log("ONMjs.about.uuid=" + ONMjs.about.uuid);
+        log("ONMjs.about.build=" + ONMjs.about.build);
+        log("ONMjs.about.epoch=" + ONMjs.about.epoch);
 
         var dataModelDeclaration = {
             namespaceType: "root",
@@ -80,86 +78,85 @@ $(function() {
             }
          
         };
-        observerContext.log("Beginning tests.");
+        log("Beginning tests.");
 
 
-        observerContext.log("Creating an ONMjs data model.");
+        log("Creating an ONMjs data model.");
         var dataModel = new ONMjs.Model(dataModelDeclaration);
 
-        observerContext.log("Creating an ONMjs data store.");
+        log("Creating an ONMjs data store.");
         var dataStore = new ONMjs.Store(dataModel);
 
         var address = dataModel.createPathAddress("addressBook.contacts");
 
-        observerContext.log("Creating an ONMjs address store.");
+        log("Creating an ONMjs address store.");
         var addressStore = new ONMjs.AddressStore(dataStore, address);
 
-        observerContext.log("Registering the address store as an observer of the data store.");
+        log("Registering the address store as an observer of the data store.");
         var addressStoreObserverId = dataStore.registerObserver(addressStore.objectStoreCallbacks, addressStore);
 
-        observerContext.log("Creating generic observer.");
-        var genericObserver = new ONMjs.observers.GenericTest(observerContext);
+        log("Creating generic observer.");
+        var genericObserver = new ONMjs.observers.GenericTest(backchannel);
 
-        observerContext.log("Attaching observers...");
+        log("Attaching observers...");
         var observerIdData = dataStore.registerObserver(genericObserver.callbackInterface, "Data Store Observer");
         var observerIdAddress = addressStore.registerObserver(genericObserver.callbackInterface, "Address Store Observer");
 
         var newContactAddress  = dataModel.createPathAddress("addressBook.contacts.contact");
 
-        observerContext.log("Creating new contact in address book.");
+        log("Creating new contact in address book.");
         var newContactNamespace = dataStore.createComponent(newContactAddress);
 
-        observerContext.log("Creating new contact in address book.");
+        log("Creating new contact in address book.");
         var newContactNamespace = dataStore.createComponent(newContactAddress);
 
         addressStore.setAddress(newContactNamespace.getResolvedAddress());
 
-        observerContext.log("Serializing address book store to JSON...");
+        log("Serializing address book store to JSON...");
         var jsonString = dataStore.toJSON();
-        observerContext.log(jsonString);
+        log(jsonString);
 
-        observerContext.log("Creating a new store from the serialized JSON...");
+        log("Creating a new store from the serialized JSON...");
         var testStore = new ONMjs.Store(dataModel, jsonString);
 
-        observerContext.log("Serializing the new store to JSON...");
+        log("Serializing the new store to JSON...");
         var jsonString2 = testStore.toJSON();
 
-        observerContext.log("Comparing the two JSON strings: they should be the same!");
+        log("Comparing the two JSON strings: they should be the same!");
         if (jsonString != jsonString2) {
             throw "Deserialization test fail.";
         }
 
 
-        observerContext.log("Creating an ONMjs.observers.NavigatorModelView instance.");
-        var observerNavigator = new ONMjs.observers.NavigatorModelView(observerContext);
+        log("Creating an ONMjs.observers.NavigatorModelView instance.");
+        var observerNavigator = new ONMjs.observers.NavigatorModelView(backchannel);
         observerNavigator.attachToStore(dataStore);
         observerNavigator.attachToCachedAddress(addressStore);
 
-        observerContext.log("Creating an ONMjs.observers.SelectedPathModelView instance.");
-        var observerSelectedPath = new ONMjs.observers.SelectedPathModelView(observerContext);
+        log("Creating an ONMjs.observers.SelectedPathModelView instance.");
+        var observerSelectedPath = new ONMjs.observers.SelectedPathModelView(backchannel);
         observerSelectedPath.attachToCachedAddress(addressStore);
 
-        observerContext.log("Creating an ONMjs.observers.SelectedNamespaceModelView instance.");
-        var observerSelectedNamespace = new ONMjs.observers.SelectedNamespaceModelView(observerContext);
+        log("Creating an ONMjs.observers.SelectedNamespaceModelView instance.");
+        var observerSelectedNamespace = new ONMjs.observers.SelectedNamespaceModelView(backchannel);
         observerSelectedNamespace.attachToCachedAddress(addressStore);
 
-        observerContext.log("Creating an ONMjs.observers.SelectedJsonModelView instance.");
-        var observerSelectedJSON = new ONMjs.observers.SelectedJsonModelView(observerContext);
+        log("Creating an ONMjs.observers.SelectedJsonModelView instance.");
+        var observerSelectedJSON = new ONMjs.observers.SelectedJsonModelView(backchannel);
         observerSelectedJSON.attachToCachedAddress(addressStore);
 
 
-        observerContext.log("Tests completed successfully.");
+        log("Tests completed successfully.");
 
-        observerContext.log("Detaching observers...");
+        log("Detaching observers...");
         addressStore.unregisterObserver(observerIdAddress);
         dataStore.unregisterObserver(observerIdData);
 
-
-        observerContext.log("TESTS PASSED.");
+        log("TESTS PASSED.");
 
     } catch (exception) {
-        observerContext.error("ONMjs Test Page failure: " + exception);
-        observerContext.log("TESTS FAILED.");
+        error("ONMjs Test Page failure: " + exception);
+        log("TESTS FAILED.");
     }
 
 });
