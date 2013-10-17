@@ -52,7 +52,7 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceCollectionModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
             @subcomponentModelViews = []
           
             label = params_.selectedNamespaceModel.____label
@@ -65,7 +65,7 @@ class ONMjs.observers.SelectedNamespaceCollectionModelView
                 subcomponentNamespace = params_.cachedAddressStore.referenceStore.openNamespace(address__)
                 prefix = "#{index++ + 1}: "
                 label = "#{subcomponentNamespace.getResolvedLabel()}<br>"
-                @subcomponentModelViews.push new ONMjs.observers.helpers.AddressSelectionLinkModelView(prefix, label, address__, params_.cachedAddressStore, undefined, @observerContext)
+                @subcomponentModelViews.push new ONMjs.observers.helpers.AddressSelectionLinkModelView(prefix, label, address__, params_.cachedAddressStore, undefined, @backchannel)
                 )
                 
         catch exception

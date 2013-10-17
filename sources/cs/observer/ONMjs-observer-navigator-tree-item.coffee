@@ -51,13 +51,13 @@ ONMjs.observers.implementation = ONMjs.observers.implementation? and ONMjs.obser
 
 class ONMjs.observers.implementation.NavigatorItemModelView
 
-    constructor: (store_, navigatorModelView_, address_, observerContext_) ->
+    constructor: (store_, navigatorModelView_, address_, backchannel_) ->
 
         # \ BEGIN: constructor scope
         try
             # \ BEGIN: constructor try scope
 
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
 
             if not (store_? and store_)
                 throw "Missing object store input parameter."
@@ -83,7 +83,7 @@ class ONMjs.observers.implementation.NavigatorItemModelView
                 try
                     @navigatorModelView.routeUserSelectAddressRequest(@address)
                 catch exception
-                    @observerContext.error("ONMjs.observers.implementation.NavigatorItemModelView.onClick failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.implementation.NavigatorItemModelView.onClick failure: #{exception}")
 
 
             #

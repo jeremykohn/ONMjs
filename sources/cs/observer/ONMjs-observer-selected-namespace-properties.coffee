@@ -52,7 +52,7 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceImmutablePropertiesModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
 
             @propertyModelViews = []
 
@@ -112,7 +112,7 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_Selected
 class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
             @propertyModelViews = []
             @namespace = params_.selectedNamespace
 
@@ -143,7 +143,7 @@ class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
 
             @updateLinkModelView = new ONMjs.observers.helpers.CallbackLinkModelView(
                 "", "Apply #{label} Edit", undefined, undefined, { styleClass: "classONMjsActionButtonConfirm" },
-                @onClickUpdateProperties, @observerContext)
+                @onClickUpdateProperties, @backchannel)
 
             @onClickDiscardPropertyEdits = (prefix_, label_, address_, selectorStore_, options_) =>
                 try
@@ -154,7 +154,7 @@ class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
 
             @discardLinkModelView = new ONMjs.observers.helpers.CallbackLinkModelView(
                 "", "Discard #{label} Edits", undefined, undefined, { styleClass: "classONMjsActionButtonCancel" },
-                @onClickDiscardPropertyEdits, @observerContext)
+                @onClickDiscardPropertyEdits, @backchannel)
                
 
             # Enumerate the object model's declaration of this namespace's mutable properties.

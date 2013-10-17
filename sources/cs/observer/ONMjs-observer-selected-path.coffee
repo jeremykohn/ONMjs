@@ -50,9 +50,9 @@ ONMjs.observers.implementation = ONMjs.observers.implementation? and ONMjs.obser
 
 
 class ONMjs.observers.implementation.SelectedPathElementModelView
-    constructor: (addressCache_, count_, selectedCount_, objectStoreAddress_, observerContext_) ->
+    constructor: (addressCache_, count_, selectedCount_, objectStoreAddress_, backchannel_) ->
         try
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
             @cachedAddressStore = addressCache_
             @objectStoreAddress = objectStoreAddress_
             @isSelected = (count_ == selectedCount_)
@@ -87,7 +87,7 @@ class ONMjs.observers.implementation.SelectedPathElementModelView
                     if not @isSelected
                         @cachedAddressStore.setAddress(@objectStoreAddress)
                 catch exception
-                    @observerContext.error("ONMjs.observers.implementation.SelectedPathElementModelView.onClick failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.implementation.SelectedPathElementModelView.onClick failure: #{exception}")
 
         catch exception
             throw "ONMjs.observers.SelectedPathElementModelView failure: #{exception}"
@@ -101,12 +101,12 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_Selected
 
 
 class ONMjs.observers.SelectedPathModelView
-    constructor: (observerContext_) ->
+    constructor: (backchannel_) ->
         # \ BEGIN: constructor
         try
             # \ BEGIN: try
 
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
 
             @pathElements = ko.observableArray []
             @cachedAddressStore = undefined
@@ -137,7 +137,7 @@ class ONMjs.observers.SelectedPathModelView
             @cachedAddressObserverInterface =
             {
                 onAttachEnd: (store_, observerId_) =>
-                    @observerContext.log("ONMjs.observers.SelectedPathModelView has attached to and is observing in ONMjs.CachedAddress instance.")
+                    @backchannel.log("ONMjs.observers.SelectedPathModelView has attached to and is observing in ONMjs.CachedAddress instance.")
 
                 onDetachEnd: (store_, observerId_) =>
                     @pathElements.removeAll()
@@ -145,7 +145,7 @@ class ONMjs.observers.SelectedPathModelView
                     @addressHumanString("not connected")
                     @cachedAddress = undefined
                     @cachedAddressStoreObserverId = undefined
-                    @observerContext.log("ONMjs.observers.SelectedPathModelView has detached from and is no longer observing an ONMjs.CachedAddress instance.")
+                    @backchannel.log("ONMjs.observers.SelectedPathModelView has detached from and is no longer observing an ONMjs.CachedAddress instance.")
 
                 onComponentCreated: (store_, observerId_, address_) =>
                     try
@@ -168,7 +168,7 @@ class ONMjs.observers.SelectedPathModelView
                         @pathElements.removeAll()
 
                         for address in addresses
-                            pathElementObject = new ONMjs.observers.implementation.SelectedPathElementModelView(store_, count++, selectedCount, address, @observerContext)
+                            pathElementObject = new ONMjs.observers.implementation.SelectedPathElementModelView(store_, count++, selectedCount, address, @backchannel)
                             @pathElements.push pathElementObject
 
                         true

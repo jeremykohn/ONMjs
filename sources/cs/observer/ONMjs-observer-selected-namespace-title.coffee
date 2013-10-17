@@ -52,7 +52,7 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceTitleModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
 
             @namespaceLabelResolved = params_.selectedNamespace.getResolvedLabel()
             @namespaceDescription = params_.selectedNamespaceModel.____description? and params_.selectedNamespaceModel.____description or "<no description provided>"
@@ -92,7 +92,7 @@ class ONMjs.observers.SelectedNamespaceTitleModelView
                 componentLabelResolved = componentNamespace.getResolvedLabel()
                 @componentSuffixString = (componentAddress.getModel().namespaceType != "root" and ":") or "::"
                 @componentClickableLink = new ONMjs.observers.helpers.AddressSelectionLinkModelView(
-                    "", componentLabelResolved, componentAddress, params_.cachedAddressStore, undefined, @observerContext)
+                    "", componentLabelResolved, componentAddress, params_.cachedAddressStore, undefined, @backchannel)
 
             if namespaceType == "component"
                 # We'll need the owning extension point's label and type information.
@@ -105,7 +105,7 @@ class ONMjs.observers.SelectedNamespaceTitleModelView
                 label = extensionPointModel.____label? and extensionPointModel.____label or "<no label defined>"
 
                 @extensionPointClickableLink = new ONMjs.observers.helpers.AddressSelectionLinkModelView(
-                    "", label, extensionPointAddress, params_.cachedAddressStore, undefined, @observerContext)
+                    "", label, extensionPointAddress, params_.cachedAddressStore, undefined, @backchannel)
 
             @templateName = undefined
 

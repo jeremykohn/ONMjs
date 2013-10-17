@@ -52,7 +52,7 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceChildrenModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
             @childModelViews = []
 
             index = 0
@@ -63,7 +63,7 @@ class ONMjs.observers.SelectedNamespaceChildrenModelView
                 if address_.getModel().namespaceType == "extensionPoint"
                     label += " (#{Encapsule.code.lib.js.dictionaryLength(childNamespace.data())})"
                 label += "<br>"
-                @childModelViews.push new ONMjs.observers.helpers.AddressSelectionLinkModelView(prefix, label, address_, params_.cachedAddressStore, undefined, @observerContext)
+                @childModelViews.push new ONMjs.observers.helpers.AddressSelectionLinkModelView(prefix, label, address_, params_.cachedAddressStore, undefined, @backchannel)
                 )
                 
         catch exception

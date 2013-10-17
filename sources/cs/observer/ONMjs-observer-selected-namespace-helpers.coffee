@@ -53,9 +53,9 @@ ONMjs.observers.helpers = ONMjs.observers.helpers? and ONMjs.observers.helpers o
 #
 # ============================================================================
 class ONMjs.observers.helpers.AddressSelectionLinkModelView
-    constructor: (prefix_, label_, address_, selectorStore_, options_, observerContext_) ->
+    constructor: (prefix_, label_, address_, selectorStore_, options_, backchannel_) ->
         try
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
             @prefix = prefix_? and prefix_ or ""
             @label = label_? and label_ or "<no label provided>"
             @address = address_? and address_ and address_.clone() or throw "Missing address input parameter."
@@ -67,7 +67,7 @@ class ONMjs.observers.helpers.AddressSelectionLinkModelView
                 try
                     @selectorStore.setAddress(@address)
                 catch exception
-                    @observerContext.error("ONMjs.observers.helpers.AddressSelectionLinkModelView.onClick failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.helpers.AddressSelectionLinkModelView.onClick failure: #{exception}")
 
         catch exception
             throw "ONMjs.observers.helpers.AddressSelectionLinkModelView failure: #{exception}"
@@ -78,9 +78,9 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_AddressS
 #
 # ============================================================================
 class ONMjs.observers.helpers.CallbackLinkModelView
-    constructor: (prefix_, label_, address_, selectorStore_, options_, callback_, observerContext_) ->
+    constructor: (prefix_, label_, address_, selectorStore_, options_, callback_, backchannel_) ->
         try
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
             @prefix = prefix_? and prefix_ or ""
             @label = label_? and label_ or "<no label provided>"
             @address = address_? and address_.clone() or undefined
@@ -95,7 +95,7 @@ class ONMjs.observers.helpers.CallbackLinkModelView
                     if not (@callback? and @callback) then throw "Internal error: Did you construct this callback link with a valid callback function?"
                     @callback(@prefix, @label, @address, @selectorStore, @options)
                 catch exception
-                    @observerContext.error("ONMjs.observers.helpers.CallbackLinkModelView.onClick failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.helpers.CallbackLinkModelView.onClick failure: #{exception}")
 
         catch exception
             throw "ONMjs.observers.helpers.CallbackLinkModelView failure: #{exception}"

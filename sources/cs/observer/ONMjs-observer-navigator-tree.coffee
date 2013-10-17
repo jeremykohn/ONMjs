@@ -50,10 +50,10 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 
 
 class ONMjs.observers.NavigatorModelView
-    constructor: (observerContext_) ->
+    constructor: (backchannel_) ->
         # \ BEGIN: constructor
         try
-            @observerContext = observerContext_? and observerContext_ or throw "Missing observer context input parameter."
+            @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
             @objectStore = undefined
             @rootMenuModelView = undefined
 
@@ -149,7 +149,7 @@ class ONMjs.observers.NavigatorModelView
                 # ----------------------------------------------------------------------------
                 onObserverAttachBegin: (store_, observerId_) =>
                     try
-                        @observerContext.log("ONMjs.observer.NavigatorModelview is now observing ONMjs.Store.")
+                        @backchannel.log("ONMjs.observer.NavigatorModelview is now observing ONMjs.Store.")
                         if @storeObserverId? and @storeObserverId
                             throw "This navigator instance is already observing an ONMjs.Store."
                         @storeObserverId = observerId_
@@ -161,7 +161,7 @@ class ONMjs.observers.NavigatorModelView
                 # ----------------------------------------------------------------------------
                 onObserverDetachEnd: (store_, observerId_) =>
                     try
-                        @observerContext.log("ONMjs.observers.NavigatorModelView is no longer observing ONMjs.Store.")
+                        @backchannel.log("ONMjs.observers.NavigatorModelView is no longer observing ONMjs.Store.")
                         if not (@storeObserverId? and @storeObserverId)
                             throw "Internal error: received detach callback but it doesn't apprear we're attached?"
                         if @storeObserverId != observerId_
@@ -179,7 +179,7 @@ class ONMjs.observers.NavigatorModelView
                         if @storeObserverId != observerId_ then throw "Unrecognized observer ID."
                         namespaceState = store_.openObserverNamespaceState(observerId_, address_)
                         namespaceState.description = "Hey this is the ONMjs.observers.NavigatorModelView class saving some submenu state."
-                        namespaceState.itemModelView = new ONMjs.observers.implementation.NavigatorItemModelView(store_, @, address_, @observerContext)
+                        namespaceState.itemModelView = new ONMjs.observers.implementation.NavigatorItemModelView(store_, @, address_, @backchannel)
 
                         if address_.isRoot()
                             @rootMenuModelView = namespaceState.itemModelView

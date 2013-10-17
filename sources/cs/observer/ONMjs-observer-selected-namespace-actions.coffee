@@ -53,18 +53,18 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceActionsModelView
     constructor: (params_) ->
         try
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
 
             #
             # ============================================================================
             @onClickAddSubcomponent = (prefix_, label_, address_, selectorStore_, options_) =>
                 try
-                    @observerContext.log("ObjectModelNavigatorNamespaceActions.onClickAddSubcomponent starting...")
+                    @backchannel.log("ObjectModelNavigatorNamespaceActions.onClickAddSubcomponent starting...")
                     componentNamespace = selectorStore_.referenceStore.createComponent(address_)
                     selectorStore_.setAddress(componentNamespace.getResolvedAddress())
 
                 catch exception
-                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickAddSubcomponent failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickAddSubcomponent failure: #{exception}")
 
             #
             # ============================================================================
@@ -81,7 +81,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                     selectorStore_.referenceStore.removeComponent(address_)
 
                 catch exception
-                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveComponent failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveComponent failure: #{exception}")
 
             #
             # ============================================================================
@@ -103,7 +103,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                         store.removeComponent(address)
 
                 catch exception
-                    @observerContext.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveAllSubcomponents failure: #{exception}")
+                    @backchannel.error("ONMjs.observers.SelectedNamespaceActionsModelView.onClickRemoveAllSubcomponents failure: #{exception}")
 
             #
             # ============================================================================
@@ -130,7 +130,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
 
             @callbackLinkCancelActionRequest = new ONMjs.observers.helpers.CallbackLinkModelView(
                 "", "Cancel Request", undefined, undefined, { styleClass: "classONMjsActionButtonCancel" }, @onClickCancelActionRequest
-                @observerContext)
+                @backchannel)
 
             @showConfirmRemove = ko.observable(false)
             @showConfirmRemoveAll = ko.observable(false)
@@ -152,7 +152,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                     
                     @callbackLinkAddSubcomponent = new ONMjs.observers.helpers.CallbackLinkModelView(
                         "", "Add #{archetypeLabel}", componentAddress, params_.cachedAddressStore, { styleClass: "classONMjsActionButtonAdd" },
-                        @onClickAddSubcomponent, @observerContext)
+                        @onClickAddSubcomponent, @backchannel)
 
                     # ACTION: remove all subcomponents
 
@@ -163,12 +163,12 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                     @callbackLinkRequestRemoveAllSubcomponents = new ONMjs.observers.helpers.CallbackLinkModelView(
                         "", "Remove All #{label}", undefined, undefined,
                         { noLink: subcomponentCount == 0, styleClass: subcomponentCount != 0 and "classONMjsActionButtonRemoveAll" or undefined }, @onClickRemoveAllSubcomponents,
-                        @observerContext)
+                        @backchannel)
 
                     @callbackLinkRemoveAllSubcomponents = new ONMjs.observers.helpers.CallbackLinkModelView(
                         "", "Proceed with Remove All", params_.selectedAddress, params_.cachedAddressStore,
                         { noLink: subcomponentCount == 0, styleClass: subcomponentCount != 0 and "classONMjsActionButtonConfirm" or undefined }, @onDoRemoveAllSubcomponents,
-                        @observerContext
+                        @backchannel
                         )
 
                     @actionsForNamespace = true
@@ -181,11 +181,11 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
                     label = params_.selectedNamespaceModel.____label? and params_.selectedNamespaceModel.____label or "<no label provided>"
                     @callbackLinkRequestRemoveComponent = new ONMjs.observers.helpers.CallbackLinkModelView(
                         "", "Remove #{label}", undefined, undefined, { styleClass: "classONMjsActionButtonRemove" }, @onClickRemoveComponent,
-                        @observerContext)
+                        @backchannel)
 
                     @callbackLinkRemoveComponent = new ONMjs.observers.helpers.CallbackLinkModelView(
                         "", "Proceed with Remove", params_.selectedAddress, params_.cachedAddressStore, { styleClass: "classONMjsActionButtonConfirm" }, @onDoRemoveComponent,
-                        @observerContext)
+                        @backchannel)
 
                     @actionsForNamespace = true
                     break

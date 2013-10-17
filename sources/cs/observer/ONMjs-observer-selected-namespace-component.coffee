@@ -53,7 +53,7 @@ class ONMjs.observers.SelectedNamespaceComponentModelView
     constructor: (params_) ->
         try
 
-            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+            @backchannel = params_.backchannel? and params_.backchannel or throw "Missing backchannel input parameter."
             componentAddress = params_.selectedAddress.createComponentAddress()
             componentNamespace = params_.cachedAddressStore.referenceStore.openNamespace(componentAddress)
 
@@ -69,7 +69,7 @@ class ONMjs.observers.SelectedNamespaceComponentModelView
                 subcomponentCount = Encapsule.code.lib.js.dictionaryLength(extensionPointNamespace.data())
                 label += " (#{subcomponentCount})"
                 @extensionPointModelViewArray.push new ONMjs.observers.helpers.AddressSelectionLinkModelView(
-                    prefix, label, address_, params_.cachedAddressStore, { noLink: noLinkFlag }, @observerContext)
+                    prefix, label, address_, params_.cachedAddressStore, { noLink: noLinkFlag }, @backchannel)
                 )
 
         catch exception
