@@ -13,6 +13,8 @@ $(function() {
         };
 
         var errorHandler = function (error_) {
+            $("BODY").css( { backgroundColor: "#FFEEDD" } );
+            $("#idLog").css( { backgroundColor: "#FFDDCC" } );
             logHandler(error_);
             alert(error_);
         };
@@ -135,7 +137,7 @@ $(function() {
 
         observerContext.log("Creating an ONMjs.observers.SelectedPathModelView instance.");
         var observerSelectedPath = new ONMjs.observers.SelectedPathModelView(observerContext);
-        observerSelectedPath.attachTo(addressStore);
+        observerSelectedPath.attachToCachedAddress(addressStore);
 
         observerContext.log("Creating an ONMjs.observers.SelectedNamespaceModelView instance.");
         var observerSelectedNamespace = new ONMjs.observers.SelectedNamespaceModelView(observerContext);
@@ -144,8 +146,6 @@ $(function() {
         observerContext.log("Creating an ONMjs.observers.SelectedJsonModelView instance.");
         var observerSelectedJSON = new ONMjs.observers.SelectedJsonModelView(observerContext);
         observerSelectedJSON.attachToCachedAddress(addressStore);
-
-
 
 
         observerContext.log("Tests completed successfully.");

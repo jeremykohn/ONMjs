@@ -83,7 +83,7 @@ class ONMjs.observers.implementation.NavigatorItemModelView
                 try
                     @navigatorModelView.routeUserSelectAddressRequest(@address)
                 catch exception
-                    @observerContext.error("ONMjs.observers.implementation.PathElementModelView.onClick failure: #{exception}")
+                    @observerContext.error("ONMjs.observers.implementation.NavigatorItemModelView.onClick failure: #{exception}")
 
 
             #
@@ -94,7 +94,7 @@ class ONMjs.observers.implementation.NavigatorItemModelView
                     @selectionsByObserverId[observerId_] = true
                     @isSelected(true)
                 catch exception
-                    throw "ONMjs.observers.implementation.PathElementModelView.addSelection failure: #{exception}"
+                    throw "ONMjs.observers.implementation.NavigatorItemModelView.addSelection failure: #{exception}"
 
 
             #
@@ -105,13 +105,13 @@ class ONMjs.observers.implementation.NavigatorItemModelView
                     delete @selectionsByObserverId[observerId_]
                     @isSelected( Encapsule.code.lib.js.dictionaryLength(@selectionsByObserverId) and true or false )
                 catch exception
-                    throw "ONMjs.observers.implementation.PathElementModelView.removeSelection failure: #{exception}"
+                    throw "ONMjs.observers.implementation.NavigatorItemModelView.removeSelection failure: #{exception}"
 
 
 
             # / END: constructor try scope
         catch exception
-            throw "ONMjs.observers.implementation.PathElementModelView construction failure: : #{exception}"
+            throw "ONMjs.observers.implementation.NavigatorItemModelView failure: : #{exception}"
         # / END: constructor
 
 

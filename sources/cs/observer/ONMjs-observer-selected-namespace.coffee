@@ -128,6 +128,7 @@ class ONMjs.observers.SelectedNamespaceModelView
 
                     # Gather up all the references required to construct the child model views.
                     childParams = {
+                        observerContext: @observerContext
                         cachedAddressStore: cachedAddressStore_
                         objectStore: objectStore
                         selectedAddress: selectedAddress
@@ -135,8 +136,8 @@ class ONMjs.observers.SelectedNamespaceModelView
                         selectedNamespaceModel: selectedNamespaceModel
                     }
 
-                    @modelviewTitle(new ONMjs.observers.SelectedNamespaceTitleModelView(childParams))
-                    @modelviewActions(new ONMjs.observers.SelectedNamespaceActionsModelView(childParams))
+                    @modelviewTitle(new ONMjs.observers.SelectedNamespaceTitleModelView(childParams, @observerContext))
+                    @modelviewActions(new ONMjs.observers.SelectedNamespaceActionsModelView(childParams, @observerContext))
 
                     namespaceType = selectedNamespaceModel.namespaceType
                     switch namespaceType

@@ -52,6 +52,8 @@ ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
 class ONMjs.observers.SelectedNamespaceImmutablePropertiesModelView
     constructor: (params_) ->
         try
+            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
+
             @propertyModelViews = []
 
             namespaceModelProperties = params_.selectedAddress.getPropertiesModel()
@@ -110,6 +112,7 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_Selected
 class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
     constructor: (params_) ->
         try
+            @observerContext = params_.observerContext? and params_.observerContext or throw "Missing observer context input parameter."
             @propertyModelViews = []
             @namespace = params_.selectedNamespace
 
@@ -139,7 +142,8 @@ class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
             label = params_.selectedNamespaceModel.____label? and params_.selectedNamespaceModel.____label or "<no label defined>"
 
             @updateLinkModelView = new ONMjs.observers.helpers.CallbackLinkModelView(
-                "", "Apply #{label} Edit", undefined, undefined, { styleClass: "classONMjsActionButtonConfirm" }, @onClickUpdateProperties)
+                "", "Apply #{label} Edit", undefined, undefined, { styleClass: "classONMjsActionButtonConfirm" },
+                @onClickUpdateProperties, @observerContext)
 
             @onClickDiscardPropertyEdits = (prefix_, label_, address_, selectorStore_, options_) =>
                 try
@@ -149,7 +153,8 @@ class ONMjs.observers.SelectedNamespaceMutablePropertiesModelView
                     throw "ONMjs.observer.SelectedNamespaceMutablePropertiesModelView.onClickDiscardPropertyEdits failure: #{exception}"
 
             @discardLinkModelView = new ONMjs.observers.helpers.CallbackLinkModelView(
-                "", "Discard #{label} Edits", undefined, undefined, { styleClass: "classONMjsActionButtonCancel" }, @onClickDiscardPropertyEdits)
+                "", "Discard #{label} Edits", undefined, undefined, { styleClass: "classONMjsActionButtonCancel" },
+                @onClickDiscardPropertyEdits, @observerContext)
                
 
             # Enumerate the object model's declaration of this namespace's mutable properties.
