@@ -19,7 +19,7 @@ $(function() {
             alert(error_);
         };
 
-        var observerContext = new ONMjs.observers.ObserverContext(logHandler, errorHandler)
+        var observerContext = new Encapsule.code.lib.base.BackChannel(logHandler, errorHandler)
 
 
 

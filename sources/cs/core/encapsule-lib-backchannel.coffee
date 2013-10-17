@@ -40,16 +40,13 @@ BLOG: http://blog.encapsule.org TWITTER: https://twitter.com/Encapsule
 namespaceEncapsule = Encapsule? and Encapsule or @Encapsule = {}
 Encapsule.code = Encapsule.code? and Encapsule.code or @Encapsule.code = {}
 Encapsule.code.lib = Encapsule.code.lib? and Encapsule.code.lib or @Encapsule.code.lib = {}
-Encapsule.code.lib.onm = Encapsule.code.lib.onm? and Encapsule.code.lib.onm or @Encapsule.code.lib.onm = {}
-
-ONMjs = Encapsule.code.lib.onm
-ONMjs.observers = ONMjs.observers? and ONMjs.observers or ONMjs.observers = {}
+Encapsule.code.lib.base = Encapsule.code.lib.base? and Encapsule.code.lib.base or @Encapsule.code.lib.base = {}
 
 
 #
 #
 # ****************************************************************************
-class ONMjs.observers.ObserverContext
+class Encapsule.code.lib.base.BackChannel
     constructor: (logHandler_, errorHandler_) ->
         try
             @logHandler = logHandler_
@@ -61,11 +58,11 @@ class ONMjs.observers.ObserverContext
                         try
                             @logHandler(html_)
                         catch exception
-                            throw "Failure occurred attempting to call your log handler callback function: #{exception}"
+                            throw "Error executing log handler function callback: #{exception}"
                         return true
                     false
                 catch exception
-                    throw "ONMjs.observer.ObserverContext.log failure: #{exception}"
+                    throw "Encapsule.code.lib.base.BackChannel.log failure: #{exception}"
 
             @error = (error_) =>
                 try
@@ -73,17 +70,17 @@ class ONMjs.observers.ObserverContext
                         try
                             @errorHandler(error_)
                         catch exception
-                            throw "Failure occurred attempting to call your error handler callback function: #{exception}"
+                            throw "Error executing error handler function callback: #{exception}"
                         return true
 
-                    throw error_
+                    throw "No error handler registered. Rethrowing exception: #{error_}"
 
                 catch exception
-                    errorMessage = "ONMjs Exception: #{exception}"
+                    errorMessage = "Encapsule.code.lib.base.BackChannel.error failure: #{exception}"
                     if console? and console and console.error? and console.error
                         console.error errorMessage
                     throw errorMessage
 
         catch exception
-            throw "ONMjs.observers.ObserverContext failure: #{exception}"
+            throw "Encapsule.code.lib.base.BackChannel failure: #{exception}"
 

@@ -134,6 +134,7 @@ then
     echo ... creating $onmcfile
     touch $onmcfile
     cat $sources_cs_core/encapsule-lib-javascript.coffee >> $onmcfile
+    cat $sources_cs_core/encapsule-lib-backchannel.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-model.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-address.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-address-binder.coffee >> $onmcfile
@@ -148,7 +149,6 @@ then
     touch $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-templates.coffee >> $onmofile
-    cat $sources_cs_observer/ONMjs-observer-context.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree-item.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-json.coffee >> $onmofile
@@ -259,7 +259,7 @@ fi
 echo =================================================================
 echo =================================================================
 echo =================================================================
-find lib/
+ls -lR lib/
 echo =================================================================
 echo =================================================================
 echo =================================================================
