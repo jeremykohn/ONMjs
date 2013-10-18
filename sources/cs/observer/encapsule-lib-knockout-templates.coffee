@@ -29,6 +29,7 @@ Encapsule.runtime.app = Encapsule.runtime.app? and Encapsule.runtime.app or @Enc
 Encapsule.runtime.app.kotemplates = Encapsule.runtime.app.kotemplates? and Encapsule.runtime.app.kotemplates or @Encapsule.runtime.app.kotemplates = []
 
 
+# ============================================================================
 Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate = (selectorId_, fnHtml_) ->
     try
         if not selectorId_? or not selectorId_ or not fnHtml_? or not fnHtml_ then throw "RegisterKnockoutViewTemplate bad parameter(s)"
@@ -39,9 +40,10 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate = (selectorId_, fnHtml
         throw "RegisterKnockoutViewTemplate selectorId=#{selectorId_} : #{exception}"
 
 
-Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate = (descriptor_, parentEl_) ->
+# ============================================================================
+Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate = (descriptor_, templateCacheEl_) ->
     try
-        if not parentEl_? or not parentEl_ then throw "Invalid parent element parameter."
+        if not templateCacheEl_? or not templateCacheEl_ then throw "Invalid templateCache element parameter."
         if not descriptor_? or not descriptor_ then throw "Invalid descriptor parameter."
         if not descriptor_.selectorId_? or not descriptor_.selectorId_ then throw "Invalid descriptor.selectorId_ parameter."
         if not descriptor_.fnHtml_? or not descriptor_.fnHtml_ then throw "Invalid descriptor.fnHtml_ parameter."
@@ -53,46 +55,31 @@ Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate = (descriptor_, parentE
             htmlViewTemplate = descriptor_.fnHtml_()
         catch exception
             throw "While evaluating the #{descriptor_.selectorId_} HTML callback: #{exception}"
-
-        parentEl_.append($("""<script type="text/html" id="#{descriptor_.selectorId_}">#{htmlViewTemplate}</script>"""))
+        templateCacheEl_.append($("""<script type="text/html" id="#{descriptor_.selectorId_}">#{htmlViewTemplate}</script>"""))
         return true
     catch exception
-        throw "InstallKnockoutViewTemplate for descriptor #{descriptor_.selectorId_} : #{exception}"
+        throw "Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate for descriptor #{descriptor_.selectorId_} : #{exception}"
 
 
-# Returns $("idKnockoutHtmlView")[0]
-Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplates = (windowManagerId_) ->
- 
-    if not windowManagerId_? or not windowManagerId_ then throw "InstallKnockoutViewTemplates missing windowManagerId parameter."
+# ============================================================================
+# templateCacheSelector_ is a JQuery selector string. e.g.
+# <div id="idKnockoutTemplates"></div>
+# InstallKnockoutViewTemplates("#idKnockoutTemplates");
 
+Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplates = (templateCacheSelector_) ->
     try
-        # Root HTML view binding for window manager.
-        windowManagerHtmlViewBinding = """
-            <!-- BEGIN: \\ ENCAPSULE PROJECT WINDOW MANAGER HOST -->
-            <span id="idEncapsuleWindowManagerHost">
-                <!-- BEGIN: \\ WINDOW MANAGER MODEL VIEW TEMPLATES -->
-                <span id="idEncapsuleWindowManagerViewTemplateCache"></span>
-                <!-- END: / WINDOW MANAGER MODEL VIEW TEMPLATES -->
-                <!-- BEGIN: \\ ENCAPSULE PROJECT WINDOW MANAGER HOST VIEW MODEL -->
-                <span id="idEncapsuleWindowManager" data-bind="template: { name: 'idKoTemplate_EncapsuleWindowManager' }"></span>
-                <!-- END: / ENCAPSULE PROJECT WINDOW MANAGER HOST VIEW MODEL -->
-            </span>
-            <!-- END: / ENCAPSULE PROJECT WINDOW MANAGER HOST -->
-            """
+        if not (templateCacheSelector_? and templateCacheSelector_)
+             throw "You must specify the selector string of the Knockout.js view model template cache's DOM element."
 
-        # Install the view. Binding occurs separately, later, at a higher context.
-        $("body").append($(windowManagerHtmlViewBinding))
-
-        templateCacheEl = $("#idEncapsuleWindowManagerViewTemplateCache")
-        windowManagerHtmlViewRootDocumentElement = $("#idEncapsuleWindowManager")
+        templateCacheEl = $(templateCacheSelector_)
 
         # Insert the HTML templates into the DOM
         for descriptor in Encapsule.runtime.app.kotemplates
             Encapsule.code.lib.kohelpers.InstallKnockoutViewTemplate(descriptor, templateCacheEl)
 
-        # Return the document element node of the window manager host span. This is what we bind the window manager to.
-        windowManagerHtmlViewRootDocumentElement[0]
+        Encapsule.runtime.app.kotemplates = []
+        true
 
     catch exception
-         throw """InstallKnockoutViewTemplates for id=#{windowManagerId_} : #{exception}"""
+         throw """InstallKnockoutViewTemplates failure: #{exception}"""
 
