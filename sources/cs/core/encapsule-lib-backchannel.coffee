@@ -73,13 +73,11 @@ class Encapsule.code.lib.base.BackChannel
                             throw "Error executing error handler function callback: #{exception}"
                         return true
 
-                    throw "No error handler registered. Rethrowing exception: #{error_}"
+                    throw error_
 
                 catch exception
-                    errorMessage = "Encapsule.code.lib.base.BackChannel.error failure: #{exception}"
-                    if console? and console and console.error? and console.error
-                        console.error errorMessage
-                    throw errorMessage
+                    throw "Encapsule.code.lib.base.BackChannel.error failure: #{exception}"
+
 
         catch exception
             throw "Encapsule.code.lib.base.BackChannel failure: #{exception}"
