@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-onm_version="0.0.19"
+onm_version="0.0.20"
 echo =================================================================
 
 lib_prefix="ONMjs-lib"
@@ -43,27 +43,33 @@ sources=$repoDir/sources
 sources_cs=$sources/cs
 sources_cs_core=$sources_cs/core
 sources_cs_observer=$sources_cs/observer
+sources_cs_models=$sources_cs/models
 sources_js=$sources/js
 echo sources=$sources
 echo sources_cs=$sources_cs
 echo sources_cs_core=$sources_cs_core
 echo sources_cs_observer=$sources_cs_observer
+echo sources_cs_models=$sources_cs_models
 echo sources_js=$sources_js
 
 stage=$repoDir/stage
 stage_cs=$stage/cs
 stage_cs_core=$stage_cs/core
 stage_cs_observer=$stage_cs/observer
+stage_cs_models=$stage_cs/models
 stage_js=$stage/js
 stage_js_core=$stage_js/core
 stage_js_observer=$stage_js/observer
+stage_js_models=$stage_js/models
 echo stage=$stage
 echo stage_cs=$stage_cs
 echo stage_cs_core=$stage_cs_core
-echo stage_cs_observer_=$stage_cs_observer
+echo stage_cs_observer=$stage_cs_observer
+echo stage_cs_models=$stage_cs_models
 echo stage_js=$stage_js
 echo stage_js_core=$stage_js_core
 echo stage_js_observer=$stage_js_observer
+echo stage_js_models=$stage_js_models
 
 
 
@@ -112,10 +118,12 @@ then
     mkdir $stage_cs
     mkdir $stage_cs_core
     mkdir $stage_cs_observer
+    mkdir $stage_cs_models
 
     echo "Staging files..."
     cp $sources_cs_core/*.coffee $stage_cs_core/
     cp $sources_cs_observer/*.coffee $stage_cs_observer/
+    cp $sources_cs_models/*.coffee $stage_cs_models/
 
     echo ... creating ONMjs-core-version.coffee
     onmvfile=$stage_cs_core/ONMjs-core-version.coffee
@@ -162,6 +170,8 @@ then
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-helpers.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-properties.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-title.coffee >> $onmofile
+    cat $sources_cs_models/ONMjs-data-model-self.coffee >> $onmofile
+
 
 fi
 
@@ -198,6 +208,8 @@ echo ... individual core
 coffee -o $stage_js_core/ -c $stage_cs_core/*.coffee
 echo ... individual observer
 coffee -o $stage_js_observer/ -c $stage_cs_observer/*.coffee
+echo ... data models
+coffee -o $stage_js_models/ -c $stage_cs_models/*.coffee
 
 echo =================================================================
 echo Finalizing ONMjs library debug Javascript files...

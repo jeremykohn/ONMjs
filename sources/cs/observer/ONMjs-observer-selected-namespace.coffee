@@ -142,8 +142,10 @@ class ONMjs.observers.SelectedNamespaceModelView
                     namespaceType = selectedNamespaceModel.namespaceType
                     switch namespaceType
                         when "root"
-                            @modelviewImmutable(new ONMjs.observers.SelectedNamespaceImmutablePropertiesModelView(childParams))
-                            @modelviewMutable(undefined)
+                            immutableModelView = new ONMjs.observers.SelectedNamespaceImmutablePropertiesModelView(childParams)
+                            @modelviewImmutable(immutableModelView.propertyModelViews.length and immutableModelView or undefined)
+                            mutableModelView = new ONMjs.observers.SelectedNamespaceMutablePropertiesModelView(childParams)
+                            @modelviewMutable(mutableModelView.propertyModelViews.length and mutableModelView or undefined)
                             newModelViewChildren = new ONMjs.observers.SelectedNamespaceChildrenModelView(childParams)
                             @modelviewChildren(newModelViewChildren.childModelViews.length and newModelViewChildren or undefined)
                             @modelviewComponent(new ONMjs.observers.SelectedNamespaceComponentModelView(childParams))
