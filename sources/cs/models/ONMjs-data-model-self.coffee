@@ -51,12 +51,87 @@ ONMjs.dataModels.implementation = ONMjs.dataModels.implementation? and ONMjs.dat
 
 ONMjs.dataModels.implementation.selfDeclaration = {}
 
+ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties =
+    namespaceType: "extensionPoint"
+    jsonTag: "metaProperties"
+    ____label: "META PROPERTIES"
+    ____descriptor: "Collection of this namespaces' meta-properties."
+    componentArchetype:
+        namespaceType: "component"
+        jsonTag: "metaproperty"
+        ____label: "META PROPERTY"
+        ____description: "Meta property"
+        ____getLabelVariant: "jsonTagAndValue"
+        
+        namespaceProperties:
+            userImmutable:
+                uuid:
+                    ____type: "uuid"
+                    fnCreate: -> uuid.v4()
+            userMutable:
+                jsonTag:
+                    ____type: "JSON tag string"
+                    fnCreate: -> ""
+                value:
+                    ____type: "string"
+                    fnCreate: -> ""
+
+ONMjs.dataModels.implementation.selfDeclaration.namespaceProperty =
+    namespaceType: "component"
+    jsonTag: "property"
+    ____label: "PROPERTY"
+    ____description: "Namespace property."
+    ____getLabelVariant: "jsonTagAndValue"
+    namespaceProperties:
+        userImmutable:
+            uuid:
+                ____type: "uuid"
+                fnCreate: -> uuid.v4()
+        userMutable:
+            jsonTag:
+                ____type: "JSON tag string"
+                fnCreate: -> ""
+            value:
+                ____type: "string"
+                fnCreate: -> ""
+    subNamespaces: [
+        ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties        
+    ]
+
+ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties =
+    namespaceType: "child"
+    jsonTag: "properties"
+    ____label: "PROPERTIES"
+    ____description: "Namespace properties."
+    subNamespaces: [
+        {
+            namespaceType: "extensionPoint"
+            jsonTag: "userImmutable"
+            ____label: "USER IMMUTABLE PROPERTIES"
+            ____description: "User immutable namespace properties."
+            componentArchetype: ONMjs.dataModels.implementation.selfDeclaration.namespaceProperty 
+
+        }
+
+        {
+            namespaceType: "extensionPoint"
+            jsonTag: "userMutable"
+            ____label: "USER MUTABLE PROPERTIES"
+            ____description: "User mutable namespace properties."
+            componentArchetype: ONMjs.dataModels.implementation.selfDeclaration.namespaceProperty 
+
+        }
+
+
+    ]
+
 
 ONMjs.dataModels.selfDeclaration = {
     namespaceType: "root"
-    jsonTag: "ONMjsDataModelDeclaration"
-    ____label: "Data Model Declaration"
+    jsonTag: "dataModelDeclaration"
+    ____label: "ONMJS DATA MODEL DECLARATION"
     ____description: "ONMjs data model declaration."
+    ____getLabelVariant: "jsonTagAndNamespaceType"
 
     namespaceProperties: 
         userImmutable:
@@ -80,16 +155,21 @@ ONMjs.dataModels.selfDeclaration = {
                 fnCreate: -> ""
 
     subNamespaces: [
+
+        ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties 
+        ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties 
+
         {
             namespaceType: "extensionPoint"
-            jsonTag: "namespaceDeclarations"
-            ____label: "namespaces"
+            jsonTag: "namespaces"
+            ____label: "NAMESPACES"
             ____description: "collection of namespace declarations."
             componentArchetype: {
                 namespaceType: "component"
-                jsonTag: "namespaceDeclaration"
-                ____label: "namespaces"
-                ____description: "Subnamespace collection."
+                jsonTag: "namespace"
+                ____label: "NAMESPACE"
+                ____description: "ONMjs component namespace declaration."
+                ____getLabelVariant: "jsonTagAndNamespaceType"
 
                 namespaceProperties: 
                     userImmutable:
@@ -114,12 +194,16 @@ ONMjs.dataModels.selfDeclaration = {
                             fnCreate: -> ""
 
                 subNamespaces: [
+
+                    ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties 
+                    ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties 
+
                     {
                         namespaceType: "extensionPoint"
-                        jsonTag: "subnamespaceDeclarations"
-                        ____label: "namespaces"
+                        jsonTag: "namespaces"
+                        ____label: "NAMESPACES"
                         ____description: "Subnamespace collection."
-                        componentArchetypePath: "ONMjsDataModelDeclaration.namespaceDeclarations.namespaceDeclaration"
+                        componentArchetypePath: "dataModelDeclaration.namespaces.namespace"
                     }
                 ]
             } # subnamespaceDeclaration
@@ -132,10 +216,26 @@ ONMjs.dataModels.selfDeclaration = {
             if data_.uuidRevision? then data_.uuidRevision = uuid.v4()
         getLabel: (data_, namespaceDescriptor_) ->
             try
-                if data_.jsonTag? and data_.jsonTag
-                    return "'#{data_.jsonTag}' (#{data_.namespaceType})"
+                defaultLabel = namespaceDescriptor_.label? and namespaceDescriptor_.label or "<no default label specified>"
 
-                return namespaceDescriptor_.label
+                if not (namespaceDescriptor_.namespaceModelDeclaration.____getLabelVariant? and namespaceDescriptor_.namespaceModelDeclaration.____getLabelVariant)
+                    return defaultLabel
+
+                switch namespaceDescriptor_.namespaceModelDeclaration.____getLabelVariant
+                    when "jsonTagAndNamespaceType"
+                        if data_.jsonTag? and data_.jsonTag
+                            return "#{data_.jsonTag} (#{data_.namespaceType})"
+                        break
+
+                    when "jsonTagAndValue"
+                        if data_.jsonTag? and data_.jsonTag
+                            return "'#{data_.jsonTag}': '#{data_.value}'"
+                        break
+
+                    else
+                       throw "Unrecognized getLabelVariant string specified."
+                
+                return namespaceDescriptor_.namespaceModelDeclaration.____label
 
             catch exception
                 throw "Failed in getLabel: #{exception}"

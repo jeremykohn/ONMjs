@@ -1,6 +1,6 @@
 #! /bin/sh
 #
-onm_version="0.0.20"
+onm_version="0.0.21"
 echo =================================================================
 
 lib_prefix="ONMjs-lib"
@@ -152,6 +152,7 @@ then
     cat $sources_cs_core/ONMjs-core-store.coffee >> $onmcfile
     cat $sources_cs_core/ONMjs-core-address-store.coffee >> $onmcfile
     cat $stage_cs_core/ONMjs-core-version.coffee >> $onmcfile
+    cat $sources_cs_models/ONMjs-data-model-self.coffee >> $onmcfile
 
     echo ... creating $onmofile
     touch $onmofile
@@ -170,7 +171,6 @@ then
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-helpers.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-properties.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-namespace-title.coffee >> $onmofile
-    cat $sources_cs_models/ONMjs-data-model-self.coffee >> $onmofile
 
 
 fi
