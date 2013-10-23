@@ -55,7 +55,7 @@ class ONMjs.observers.NavigatorModelView
         try
             @backchannel = backchannel_? and backchannel_ or throw "Missing backchannel input parameter."
             @objectStore = undefined
-            @rootMenuModelView = undefined
+            @rootMenuModelView = ko.observable(undefined)
 
             # Navigator may be attached to a single ONMjs.Store object as an observer. Once registered as an
             # ONMjs.Store observer, Navigator will throw an exception if it receives callbacks from the same
@@ -88,6 +88,7 @@ class ONMjs.observers.NavigatorModelView
                     if not @storeObserverId? and @storeObserverId then throw "This navigator instance is not attached to an ONMjs.Store instance."
                     @store.unregisterObserver(@storeObserverId)
                     @storeObserverId = undefined
+                    @store = undefined
                     true
                 catch exception
                     throw "ONMjs.observers.NavigatorModelView.detachFromStore failure: #{exception}"
@@ -184,7 +185,7 @@ class ONMjs.observers.NavigatorModelView
                         namespaceState.itemModelView = new ONMjs.observers.implementation.NavigatorItemModelView(store_, @, address_, @backchannel)
 
                         if address_.isRoot()
-                            @rootMenuModelView = namespaceState.itemModelView
+                            @rootMenuModelView(namespaceState.itemModelView)
 
                         parentAddress = address_.createParentAddress()
                         if parentAddress? and parentAddress?
@@ -219,7 +220,7 @@ class ONMjs.observers.NavigatorModelView
                         namespaceState = store_.openObserverNamespaceState(observerId_, address_)
 
                         if address_.isRoot()
-                            @rootMenuModelView = undefined
+                            @rootMenuModelView(undefined)
 
                         parentAddress = address_.createParentAddress()
                         if parentAddress? and parentAddress
@@ -313,8 +314,9 @@ class ONMjs.observers.NavigatorModelView
 
 Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_NavigatorViewModel", ( -> """
 <span data-bind="if: rootMenuModelView">
+Online
     <div class="classONMjsNavigator">
-        <span data-bind="template: { name: 'idKoTemplate_NavigatorItemViewModel', foreach: rootMenuModelView.children }"></span>
+        <span data-bind="template: { name: 'idKoTemplate_NavigatorItemViewModel', foreach: rootMenuModelView().children }"></span>
     </div>
 </span>
 """))
