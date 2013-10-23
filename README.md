@@ -6,6 +6,8 @@ ONMjs was created to simplify the development of complex client-side HTML 5 data
 
 **[ONMjs Library Documentation](https://github.com/Encapsule/ONMjs/wiki)**
 
+**[ONMjs Library Download](http://onmjs.encapsule.org/lib/)**
+
 #### Quick Facts
 
 * Core dependencies: **None**. ONMjs' core classes are pure Javascript.
