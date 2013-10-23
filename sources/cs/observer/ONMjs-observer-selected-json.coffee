@@ -56,7 +56,7 @@ class ONMjs.observers.SelectedJsonModelView
             @jsonString = ko.observable "<not connected>"
 
             @cachedAddressStore = undefined
-            @cahcedAddressStoreObserverId = undefined
+            @cachedAddressObserverId = undefined
 
             @saveJSONAsLinkHtml = ko.computed =>
                 # Inpsired by: http://stackoverflow.com/questions/3286423/is-it-possible-to-use-any-html5-fanciness-to-export-local-storage-to-excel/3293101#3293101
@@ -69,17 +69,17 @@ class ONMjs.observers.SelectedJsonModelView
                     if not (cachedAddress_? and cachedAddress_) then throw "Missing cached address store input parameter."
                     if @cachedAddressStore? and @cachedAddressStore then throw "Already attached to an ONMjs.CachedAddress object."
                     @cachedAddressStore = cachedAddress_
-                    @storeObserverId = cachedAddress_.registerObserver(@cachedAddressCallbackInterface, @)
+                    @cachedAddressObserverId = cachedAddress_.registerObserver(@cachedAddressCallbackInterface, @)
                     true
                 catch exception
                     throw "ONMjs.observers.SelectedJsonModelView.attachToCachedAddress failure: #{exception}."
 
             @detachFromCachedAddress = () =>
                 try
-                    if not (@cachedAddressStoreObserverId? and @cachedAddressStoreObserverId) then throw "Not attached to an ONMjs.CachedAddress object."
-                    @cachedAddressStore.unregisterObserver(@cachedAddressStoreObserverId)
+                    if not (@cachedAddressStore? and @cachedAddressStore) then throw "Not attached to address store object."
+                    @cachedAddressStore.unregisterObserver(@cachedAddressObserverId)
                     @cachedAddressStore = undefined
-                    @cachedAddressStoreObserverId = undefined
+                    @cachedAddressObserverId = undefined
                     true
                 catch exception
                     throw "ONMjs.observers.SelectedJsonModelView.detachFromCachedAddress failure: #{exception}."

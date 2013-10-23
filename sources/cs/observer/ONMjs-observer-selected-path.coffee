@@ -129,6 +129,8 @@ class ONMjs.observers.SelectedPathModelView
                 try
                     if not (@cachedAddressStoreObserverId? and @cachedAddressStoreObserverId) then throw "Not attached to an ONMjs.CachedAddress object."
                     @cachedAddressStore.unregisterObserver(@cachedAddressStoreObserverId)
+                    @cachedAddressStoreObserverId = undefined
+                    @cachedAddressStore = undefined
                     true
                 catch exception
                     throw "ONMjs.observers.SelectedPathModelView.detachFromCachedAddress failure: #{exception}"
@@ -136,14 +138,14 @@ class ONMjs.observers.SelectedPathModelView
 
             @cachedAddressObserverInterface =
             {
-                onAttachEnd: (store_, observerId_) =>
+                onObserverAttachEnd: (store_, observerId_) =>
                     @backchannel.log("ONMjs.observers.SelectedPathModelView has attached to and is observing in ONMjs.CachedAddress instance.")
 
-                onDetachEnd: (store_, observerId_) =>
+                onObserverDetachEnd: (store_, observerId_) =>
                     @pathElements.removeAll()
                     @addressHashString("not connected")
                     @addressHumanString("not connected")
-                    @cachedAddress = undefined
+                    @cachedAddressStore = undefined
                     @cachedAddressStoreObserverId = undefined
                     @backchannel.log("ONMjs.observers.SelectedPathModelView has detached from and is no longer observing an ONMjs.CachedAddress instance.")
 

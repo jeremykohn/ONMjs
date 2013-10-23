@@ -67,7 +67,7 @@ class ONMjs.observers.NavigatorModelView
 
             # User click events write a new selection address to a ONMjs.CachedAddress.
             # Which CachedAddress to write is selected by @currentlySelectedCachedAddress.
-            @selectedCachedAddressSinkStore = undefined
+            @selectedCachedAddressSink = undefined
 
             #
             # ============================================================================
@@ -104,9 +104,12 @@ class ONMjs.observers.NavigatorModelView
 
             #
             # ============================================================================
-            @detachFromCachedAddress = (cachedAddres_, observerId_) =>
+            # Navigator allows multiple address stores to be connected (e.g. each might represent a selection in a multi-selction).
+            # The client is thus responsible for keeping track of cachedAddress_, observerId_ pair required to affect unregistration.
+            #
+            @detachFromCachedAddress = (cachedAddress_, observerId_) =>
                 try
-                    if not (cachedAddress_? and cachedAddres_) then throw "Missing cached address input parameter."
+                    if not (cachedAddress_? and cachedAddress_) then throw "Missing cached address input parameter."
                     if not (observerId_? and observerId_) then throw "Missing observer ID input parameter."
                     cachedAddress_.unregisterObserver(observerId_)
                     true
@@ -115,24 +118,23 @@ class ONMjs.observers.NavigatorModelView
 
             #
             # ============================================================================
-            @setCachedAddressSinkStore = (cachedAddress_) =>
+            @setCachedAddressSink = (cachedAddress_) =>
                 try
-                    if not (cachedAddress_? and cachedAddress_) then throw "Missing cached address input parameter."
-                    @selectedCachedAddressSinkStore = cachedAddress_
+                    @selectedCachedAddressSink = cachedAddress_
 
                 catch exception
-                    throw "ONMjs.observers.NavigatorModelView.setCachedAddressSinkStore failure: #{exception}"
+                    throw "ONMjs.observers.NavigatorModelView.setCachedAddressSink failure: #{exception}"
 
 
             #
             # ============================================================================
             @routeUserSelectAddressRequest = (address_) =>
                 try
-                    if @selectedCachedAddressSinkStore? and @selectedCachedAddressSinkStore
-                        @selectedCachedAddressSinkStore.setAddress(address_)
+                    if @selectedCachedAddressSink? and @selectedCachedAddressSink
+                        @selectedCachedAddressSink.setAddress(address_)
                         return
                     message = "ONMjs.obsevers.NavigatorModelView.routeUserSelectAddressRequest for address  '#{address_.getHashString()}'failed. " +
-                        "setCachedAddressSinkStore method must be called to set the routing destination."
+                        "setCachedAddressSink method must be called to set the routing destination."
                     alert(message)
                     
                 
