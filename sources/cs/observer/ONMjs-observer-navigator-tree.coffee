@@ -314,7 +314,6 @@ class ONMjs.observers.NavigatorModelView
 
 Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_NavigatorViewModel", ( -> """
 <span data-bind="if: rootMenuModelView">
-Online
     <div class="classONMjsNavigator">
         <span data-bind="template: { name: 'idKoTemplate_NavigatorItemViewModel', foreach: rootMenuModelView().children }"></span>
     </div>
