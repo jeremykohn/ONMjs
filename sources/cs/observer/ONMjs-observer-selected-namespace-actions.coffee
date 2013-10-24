@@ -197,6 +197,7 @@ class ONMjs.observers.SelectedNamespaceActionsModelView
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_SelectedNamespaceActionsViewModel", ( -> """
+<span data-bind="if: actionsForNamespace">
 <div class="classONMjsSelectedNamespaceSectionTitle">
     Actions:
 </div>
@@ -247,5 +248,6 @@ Encapsule.code.lib.kohelpers.RegisterKnockoutViewTemplate("idKoTemplate_Selected
     </span>
     <span data-bind="ifnot: actionsForNamespace"><i>No actions defined for this namespace.</i></span>
 </div>
+</span>
 """))
 

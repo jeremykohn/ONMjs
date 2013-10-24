@@ -61,10 +61,16 @@ ONMjs.implementation.binding.InitializeNamespaceProperties = (data_, descriptor_
             for memberName, functions of descriptor_.userImmutable
                 if functions.fnCreate? and functions.fnCreate
                     data_[memberName] = functions.fnCreate()
+                else
+                    if functions.defaultValue? and functions.defaultValue
+                        data_[memberName] = functions.defaultValue
         if descriptor_.userMutable? and descriptor_.userMutable
             for memberName, functions of descriptor_.userMutable
                 if functions.fnCreate? and functions.fnCreate
                     data_[memberName] = functions.fnCreate()
+                else
+                    if functions.defaultValue? and functions.defaultValue
+                        data_[memberName] = functions.defaultValue
         return true
 
     catch exception

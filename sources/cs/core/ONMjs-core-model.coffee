@@ -68,8 +68,8 @@ class ONMjs.implementation.ModelDetails
                     tag = ONMD_.jsonTag? and ONMD_.jsonTag or throw "Namespace declaration missing required `jsonTag` property."
                     path = path_? and path_ and "#{path_}.#{tag}" or tag
 
-                    label = ONMD_.____label? and ONMD_.____label or "<no label provided>"
-                    description = ONMD_.____description? and ONMD_.____description or "<no description provided>"
+                    label = ONMD_.____label? and ONMD_.____label or ONMD_.jsonTag
+                    description = ONMD_.____description? and ONMD_.____description or "no description provided"
                     id = @countDescriptors++
 
                     namespaceType = (ONMD_.namespaceType? and ONMD_.namespaceType) or (not id and (ONMD_.namespaceType = "root")) or throw "Internal error unable to determine namespace type."
@@ -291,7 +291,7 @@ class ONMjs.implementation.ModelDetails
                 throw "Missing required root namespace property 'jsonTag'."
 
             @model.jsonTag = objectModelDeclaration_.jsonTag
-            @model.label = objectModelDeclaration_.____label? and objectModelDeclaration_.____label or "<no label provided>"
+            @model.label = objectModelDeclaration_.____label? and objectModelDeclaration_.____label or objectModelDeclaration_.jsonTag
             @model.description = objectModelDeclaration_.____description? and objectModelDeclaration_.____description or "<no description provided>"
 
             # Deep copy the specified object model declaration object.
