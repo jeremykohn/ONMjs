@@ -90,10 +90,16 @@ ONMjs.dataModels.implementation.selfDeclaration.namespaceProperty =
         userMutable:
             jsonTag:
                 ____type: "JSON tag string"
-                fnCreate: -> ""
+                defaultValue: ""
             value:
                 ____type: "string"
-                fnCreate: -> ""
+                defaultValue: ""
+            ____type:
+                ____type: "string"
+                defaultValue: ""
+            ____description:
+                ____type: "string"
+                defaultValue: ""
     subNamespaces: [
         ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties        
     ]
@@ -125,6 +131,32 @@ ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties =
 
     ]
 
+ONMjs.dataModels.implementation.selfDeclaration.semanticBindings =
+    namespaceType: "child"
+    jsonTag: "semanticBindings"
+    ____label: "Semantic Bindings"
+    ____description:" Semantic binding options for this data model."
+    namespaceProperties:
+        userMutable:
+            componentKeyGenerator:
+                defaultValue: "internal"
+                ____type: "enum"
+                ____values: [ "disabled", "internal", "external" ]
+            componentKeyType:
+                defaultValue: "locallyUnique"
+                ____type: "enum"
+                ____values: [ "locallyUnique", "globallyUnique" ]
+            namespaceVersioning:
+                defaultValue: "disabled"
+                ____type: "enum"
+                ____values: [ "disabled", "internal", "external" ]
+            namespaceVersioningMode:
+                defaultValue: "disabled"
+                ____type: "enum"
+                ____values: [ "disabled", "simple", "advanced" ]
+
+
+
 
 ONMjs.dataModels.selfDeclaration = {
     namespaceType: "root"
@@ -149,7 +181,7 @@ ONMjs.dataModels.selfDeclaration = {
                     userImmutable:
                         revision:
                             ____type: "integer"
-                            fnCreate: -> 0
+                            defaultValue: 0
                         uuid:
                             ____type: "uuid"
                             fnCreate: -> uuid.v4()
@@ -158,20 +190,21 @@ ONMjs.dataModels.selfDeclaration = {
                             fnCreate: -> uuid.v4()
                         namespaceType:
                             ____type: "namespaceTypeEnum"
-                            fnCreate: -> "root"
+                            defaultValue: "root"
                     userMutable:
                         jsonTag:
                             ____type: "JSON tag string"
-                            fnCreate: -> ""
+                            defaultValue: ""
                         ____label:
                             ____type: "String"
-                            fnCreate: -> ""
+                            defaultValue: ""
                         ____description:
                             ____type: "String"
-                            fnCreate: -> ""
+                            defaultValue: ""
                 subNamespaces: [
                     ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties 
                     ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties 
+                    ONMjs.dataModels.implementation.selfDeclaration.semanticBindings
                     {
                         namespaceType: "extensionPoint"
                         jsonTag: "namespaces"
@@ -187,7 +220,7 @@ ONMjs.dataModels.selfDeclaration = {
                                 userImmutable:
                                     revision:
                                         ____type: "integer"
-                                        fnCreate: -> 0
+                                        defaultValue: 0
                                     uuid:
                                         ____type: "uuid"
                                         fnCreate: -> uuid.v4()
@@ -197,16 +230,16 @@ ONMjs.dataModels.selfDeclaration = {
                                 userMutable:
                                     namespaceType:
                                         ____type: "Must be 'child' or 'extensionPoint' or 'component'"
-                                        fnCreate: -> "invalid"
+                                        defaultValue: "invalid"
                                     jsonTag:
                                         ____type: "JSON tag string"
-                                        fnCreate: -> ""
+                                        defaultValue: ""
                                     ____label:
                                         ____type: "String"
-                                        fnCreate: -> ""
+                                        defaultValue: ""
                                     ____description:
                                         ____type: "String"
-                                        fnCreate: -> ""
+                                        defaultValue: ""
                             subNamespaces: [
                                 ONMjs.dataModels.implementation.selfDeclaration.namespaceProperties 
                                 ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties 

@@ -338,6 +338,14 @@ class ONMjs.implementation.ModelDetails
             Object.freeze @objectModelPathMap
             Object.freeze @objectModelDescriptorById
 
+
+            @semanticBindings = Encapsule.code.lib.js.clone @objectModelDeclaration.semanticBindings
+
+
+
+
+
+
         catch exception
             throw "ONMjs.implementation.ModelDetails failure: #{exception}"
 
