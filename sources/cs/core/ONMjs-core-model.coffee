@@ -339,9 +339,48 @@ class ONMjs.implementation.ModelDetails
             Object.freeze @objectModelDescriptorById
 
 
-            @semanticBindings = Encapsule.code.lib.js.clone @objectModelDeclaration.semanticBindings
+            @semanticBindings = {}
 
+            # componentKeyGenerator | namespaceUpdateRevision | Notes
+            # disabled              | *                       | Single-component model w/finite address space.
+            # internalLuid          | *                       | Reserves 'key' property name in component-type namespaces. (locally unique integer keys)
+            # internalUuid          | *                       | Reserves 'key' property name in component-type namespaces (universally unique UUID string)
+            # external              | *                       | data model declaration object must supply an implementation of semanticBinding.getUniqueKey
+            # *                     | disabled                | Disable dispatch of Namespace.update signal-scope callbacks to semanticBinding.update callback.
+            # *                     | internalSimple          | Reserves 'revision' property name
+            # *                     | internalAdvanced        | Reserved 'revision', 'uuidRevision', 'epochRevision' property names
+            # *                     | external                | Enables dispatch of Namespace.update signal-scope callbacks to semanticBindings.update callback.
 
+            @componentKeyGenerator = "external"
+            @namespaceUpdateRevision = "disabled"
+
+            if @objectModelDeclaration.semanticBindings? and @objectModelDeclaration.semanticBindings
+                declaredBindings = @objectModelDeclaration.semanticBindings
+                if declaredBindings.componentKeyGenerator? and declaredBindings.componentKeyGenerator
+                    @componentKeyGenerator = declaredBindings.componentKeyGenerator
+                if declaredBindings.namespaceUpdateRevision? and declaredBindings.namespaceUpdateRevision
+                    @namespaceUpdateRevision = declaredBindings.namespaceUpdateRevision
+
+            switch @componentKeyGenerator
+                when "disabled"
+                    break
+                when "internalLuid"
+                    @semanticBindings.getUniqueKey = (data_) -> data_.key
+                    @semanticBindings.setUniqueKey = (data_) ->
+                        counter = ONMjs.implementation.LUID? and ONMjs.implementation.LUID or ONMjs.implementation.LUID = 1
+                        counter++
+                    break
+                when "internalUuid"
+                    @semanticBindings.getUniqueKey = (data_) -> data_.key
+                    @semanticBindings.setUniqueKey = (data_) -> data_.key = uuid.v4()
+                    break
+                when "external"
+                    @semanticBindings.getUniqueKey = @objectModelDeclaration.semanticBindings? and @objectModelDeclaration.semanticBindings and
+                        @objectModelDeclaration.semanticBindings.getUniqueKey? and @objectModelDeclaration.semanticBindings.getUniqueKey or undefined
+                    @semanticBindings.setUniqueKey = @objectModelDeclaration.semanticBindings? and @objectModelDeclaration.semanticBindings and
+                        @objectModelDeclaration.semanticBindings.setUniqueKey? and @objectModelDeclaration.semanticBindings.setUniqueKey or undefined
+                else
+                    throw "Unrecognized componentKeyGenerator='#{@componentKeyGenerator}'"
 
 
 
@@ -379,7 +418,7 @@ class ONMjs.Model
             # --------------------------------------------------------------------------
             @getSemanticBindings = =>
                 try
-                    return @implementation.objectModelDeclaration.semanticBindings
+                    return @implementation.semanticBindings
 
                 catch exception
                     throw "ONMjs.Model.getSemanticBindings failure: #{exception}"

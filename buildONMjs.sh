@@ -1,6 +1,10 @@
 #! /bin/sh
 #
-onm_version="0.0.26"
+# release.update.build
+# feature.release.build
+
+# version, update, build
+onm_version="0.0.27"
 echo =================================================================
 
 lib_prefix="ONMjs-lib"
@@ -159,6 +163,7 @@ then
     cat $sources_cs_observer/encapsule-lib-knockout-bindings.coffee >> $onmofile
     cat $sources_cs_observer/encapsule-lib-knockout-templates.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-generic-test.coffee >> $onmofile
+    cat $sources_cs_observer/ONMjs-observer-backchannel.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-navigator-tree-item.coffee >> $onmofile
     cat $sources_cs_observer/ONMjs-observer-selected-json.coffee >> $onmofile

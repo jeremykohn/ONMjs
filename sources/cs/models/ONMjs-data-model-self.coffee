@@ -139,21 +139,14 @@ ONMjs.dataModels.implementation.selfDeclaration.semanticBindings =
     namespaceProperties:
         userMutable:
             componentKeyGenerator:
-                defaultValue: "internal"
+                defaultValue: "internalLuid"
                 ____type: "enum"
-                ____values: [ "disabled", "internal", "external" ]
-            componentKeyType:
-                defaultValue: "locallyUnique"
-                ____type: "enum"
-                ____values: [ "locallyUnique", "globallyUnique" ]
+                ____values: [ "disabled", "internalLuid", "internalUuid", "external" ]
             namespaceVersioning:
                 defaultValue: "disabled"
                 ____type: "enum"
-                ____values: [ "disabled", "internal", "external" ]
-            namespaceVersioningMode:
-                defaultValue: "disabled"
-                ____type: "enum"
-                ____values: [ "disabled", "simple", "advanced" ]
+                ____values: [ "disabled", "internalSimple", "internalAdvanced", "external" ]
+
 
 
 
