@@ -167,8 +167,11 @@ ONMjs.implementation.binding.ResolveNamespaceDescriptor = (resolveActions_, stor
                 ONMjs.implementation.binding.InitializeNamespaceProperties(newData, descriptor_.namespaceModelPropertiesDeclaration)
 
                 if descriptor_.namespaceType == "component"
+                    if not (resolveActions_.setUniqueKey? and resolveActions_.setUniqueKey)
+                        throw "You must define semanticBindings.setUniqueKey function in your data model declaration."
+                    resolveActions_.setUniqueKey(newData)
                     if not (resolveActions_.getUniqueKey? and resolveActions_.getUniqueKey)
-                        throw "In order to create new components at runtime you must define the semanticBindings.getUniqueKey function in your data model declaration object."
+                        throw "You must define semanticBindings.getUniqueKey function in your data model declaration."
                     resolveResults.key = resolveResults.jsonTag = resolveActions_.getUniqueKey(newData)
                     if not (resolveResults.key? and resolveResults.key)
                         throw "Your data model's semanticBindings.getUniqueKey function returned an invalid key. Key cannot be zero or zero-length."
@@ -212,9 +215,11 @@ class ONMjs.implementation.AddressTokenBinder
             targetComponentDescriptor = token_.componentDescriptor
 
             semanticBindings = model.getSemanticBindings()
+            setUniqueKeyFunction = semanticBindings? and semanticBindings and semanticBindings.setUniqueKey? and semanticBindings.setUniqueKey or undefined
             getUniqueKeyFunction = semanticBindings? and semanticBindings and semanticBindings.getUniqueKey? and semanticBindings.getUniqueKey or undefined
 
             resolveActions = {
+                setUniqueKey: setUniqueKeyFunction
                 getUniqueKey: getUniqueKeyFunction
             }
 

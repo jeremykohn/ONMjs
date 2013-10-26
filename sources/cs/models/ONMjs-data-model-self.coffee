@@ -71,10 +71,10 @@ ONMjs.dataModels.implementation.selfDeclaration.namespaceMetaProperties =
             userMutable:
                 jsonTag:
                     ____type: "JSON tag string"
-                    fnCreate: -> ""
+                    defaultValue: ""
                 value:
                     ____type: "string"
-                    fnCreate: -> ""
+                    defaultValue: ""
 
 ONMjs.dataModels.implementation.selfDeclaration.namespaceProperty =
     namespaceType: "component"
@@ -252,7 +252,10 @@ ONMjs.dataModels.selfDeclaration = {
     ]
 
     semanticBindings:
+        setUniqueKey: (data_) -> data_.uuid = uuid.v4()
+
         getUniqueKey: (data_) -> data_.uuid
+
         update: (data_) ->
             if data_.revision? then data_.revision++
             if data_.uuidRevision? then data_.uuidRevision = uuid.v4()

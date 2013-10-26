@@ -367,8 +367,9 @@ class ONMjs.implementation.ModelDetails
                 when "internalLuid"
                     @semanticBindings.getUniqueKey = (data_) -> data_.key
                     @semanticBindings.setUniqueKey = (data_) ->
-                        counter = ONMjs.implementation.LUID? and ONMjs.implementation.LUID or ONMjs.implementation.LUID = 1
-                        counter++
+                        data_.key = ONMjs.implementation.LUID? and ONMjs.implementation.LUID or ONMjs.implementation.LUID = 1
+                        ONMjs.implementation.LUID++
+                        data_.key
                     break
                 when "internalUuid"
                     @semanticBindings.getUniqueKey = (data_) -> data_.key
