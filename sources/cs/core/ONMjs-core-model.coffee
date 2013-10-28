@@ -339,7 +339,7 @@ class ONMjs.implementation.ModelDetails
             Object.freeze @objectModelDescriptorById
 
 
-            @semanticBindings = {}
+            @semanticBindings = @objectModelDeclaration.semanticBindings? and @objectModelDeclaration.semanticBindings or {}
 
             # componentKeyGenerator | namespaceUpdateRevision | Notes
             # disabled              | *                       | Single-component model w/finite address space.
@@ -351,18 +351,15 @@ class ONMjs.implementation.ModelDetails
             # *                     | internalAdvanced        | Reserved 'revision', 'uuidRevision', 'epochRevision' property names
             # *                     | external                | Enables dispatch of Namespace.update signal-scope callbacks to semanticBindings.update callback.
 
-            @componentKeyGenerator = "external"
-            @namespaceUpdateRevision = "disabled"
-
-            if @objectModelDeclaration.semanticBindings? and @objectModelDeclaration.semanticBindings
-                declaredBindings = @objectModelDeclaration.semanticBindings
-                if declaredBindings.componentKeyGenerator? and declaredBindings.componentKeyGenerator
-                    @componentKeyGenerator = declaredBindings.componentKeyGenerator
-                if declaredBindings.namespaceUpdateRevision? and declaredBindings.namespaceUpdateRevision
-                    @namespaceUpdateRevision = declaredBindings.namespaceUpdateRevision
+            @componentKeyGenerator = @semanticBindings.componentKeyGenerator? and @semanticBindings.componentKeyGenerator or "external"
+            @namespaceUpdateRevision = @semanticBindings.namespaceUpdateRevision? and @semanticBindings.namespaceUpdateRevision or "disabled"
 
             switch @componentKeyGenerator
                 when "disabled"
+                    if @semanticBindings.getUniqueKey? and @semanticBindings.getUniqueKey
+                        delete @semanticBindings.getUniqueKey
+                    if @semanticBindings.setUniqueKey? and @semanticBindings.setUniqueKey
+                        delete @semanticBindings.setUniqueKey
                     break
                 when "internalLuid"
                     @semanticBindings.getUniqueKey = (data_) -> data_.key

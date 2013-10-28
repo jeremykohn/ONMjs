@@ -4,7 +4,7 @@
 # feature.release.build
 
 # version, update, build
-onm_version="0.0.28"
+onm_version="0.0.29"
 echo =================================================================
 
 lib_prefix="ONMjs-lib"
