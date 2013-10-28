@@ -69,6 +69,9 @@ $(function() {
                 getUniqueKey: function(data_) {
                     return data_.key;
                 },
+                setUniqueKey: function(data_) {
+                    data_.key = uuid.v4()
+                },
                 update: function(data_) {
                     if (data_.revision != null) {
                         data_.revision++;
